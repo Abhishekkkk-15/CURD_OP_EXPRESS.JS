@@ -1,0 +1,32 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.main_container{
+    height: 40px;
+    width: 100%;
+    background-color: #ccc;
+    position: sticky;
+}
+
+.main_container ul{
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+     padding-top: 10px;   
+    text-decoration: none;
+
+}
+
+.main_container ul li{
+    text-decoration: none;
+    cursor: pointer;
+    list-style: none;
+    font-size: 20px;
+}
+
+.main_container ul li a{
+    text-decoration: none;
+    color: black;
+}

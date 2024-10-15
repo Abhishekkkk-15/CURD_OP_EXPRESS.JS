@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Register() {
 
 const [reg,setReg] = useState([])
-const [userRegi, setuserRegi] = useState(false)
+const [userRegi, setuserRegi] = useState('')
 
 
 const handleChange = (e) => {
@@ -13,20 +14,18 @@ const handleChange = (e) => {
          ...prevProduct,
         [name]: value,
      }));
-    }
+    } 
     
     
     const handleRegister = async (event) =>{
         event.preventDefault()
         const registerUser = await axios.post("http://localhost:8000/CURD/reg",reg)
-        if(registerUser){
-        setuserRegi(true)
-        }
+        setuserRegi(registerUser?.data)
 }
 
   return (
     <div className='container w-100 p-3 align-middle bg-g'>
-    {userRegi? <label  className="col-sm-2 col-form-label">User Registred   </label>: ""}
+    {<label  className="col-sm-2 col-form-label">{userRegi}</label>}
 
         <form onSubmit={handleRegister}>
         <div className="mb-3 row">
@@ -49,6 +48,7 @@ const handleChange = (e) => {
   </div>
   <button type='submit' onClick={handleRegister} className='btn btn-primary btn-block' >Register</button>
   </form>
+  <p className='mt-5'> <Link to={"/login"} className='mt-3'>Already have an account?</Link></p>
     </div>
   )
 }

@@ -89,8 +89,37 @@ const registerUser = async(req,res)=>{
          res.status(200).send("User Regitred")
 
     } catch (error) {
-        console.log("Error while Registreing User",error)
+        if (error.name === 'ValidationError') {
+            res.status(200).send("Validation Error Check All Fields")
+        } else {
+            res.status(200).send('Error saving product:');
+        }
     }
+}
+
+const loginuser = async(req,res)=>{
+   
+    const user = await User.findOne({"email":req.body.email})
+    console.log(user)
+    if(!user){
+     return res.status(200).json(
+        {
+            message:"user not found",
+        }
+     )
+    }
+    if( user.email && user.password === req.body.password){
+    res.status(200).json(
+        {
+            message:"User loged in",
+            writePermission : user?.writePermission   
+        
+        })
+    }else{
+      res.status(200).send("Email or password are incorrect")
+    }
+    
+   
 }
 
 export {
@@ -100,5 +129,6 @@ export {
     updateProduct,
     replaceProduct,
     deleteProduct,
-    registerUser
+    registerUser,
+    loginuser
 }

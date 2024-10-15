@@ -1,5 +1,4 @@
 import React from 'react'
-// import '../componentsCss/navbar.css'
 import { Link } from 'react-router-dom'
 
 function Navbar() {
@@ -34,7 +33,7 @@ function Navbar() {
         </ul>
         <form className="d-flex" role="search">
           {/* <button className="btn btn-outline-success" type="submit">Search</button> */}
-          <Link to="/reg"><button className="btn btn-outline-success ms-3" type="submit">Register</button></Link>
+          <Link to="/login"><button className="btn btn-outline-success ms-3" type="submit">Login</button></Link>
         </form>
       </div>
     </div>

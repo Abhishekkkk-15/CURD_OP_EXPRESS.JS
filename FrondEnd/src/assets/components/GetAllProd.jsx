@@ -1,10 +1,14 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
 import axios from 'axios'
+import { useSelector } from 'react-redux';
+import PlcaeOrder from './PlcaeOrder';
 // import "../componentsCss/fetprod.css"
+import { Link } from 'react-router-dom';
 
 function GetAllProd() {
-
+const loginSt = useSelector(state => state.login.loginSt);
+console.log(loginSt)
 const [product,setProduct] = useState([])
 const [error,setError] = useState(false)
 const [loading,setLoading] = useState(false)
@@ -59,11 +63,11 @@ if(error){
                   <h5 className="card-title">{prod.title}</h5>
                   <h6 className="card-subtitle mb-2 text-muted">Price: &#x20b9;{prod.price}</h6>
                   <p className="card-text">{prod.description}</p>
-                  <a className="btn btn-primary">Buy Now</a>
-                  <a className="btn btn-primary ms-2" onClick={()=>deleteprod(prod._id)}>Delete</a>
+                 <Link to="/buy"><button className="btn btn-primary ms-2" type="submit">Buy Now</button></Link>
+                  <button className="btn btn-primary ms-2" onClick={()=>deleteprod(prod._id)} disabled={!loginSt}>Delete</button>
                 </div>
               </div>
-            </div>
+            </div>  
           ))
         }
       </div>

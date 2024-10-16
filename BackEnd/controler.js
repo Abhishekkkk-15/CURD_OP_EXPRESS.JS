@@ -9,7 +9,6 @@ const getProducts =async(req,res)=>{
     // console.log(await Products.find())
 }
 
-
 const getProduct = async (req,res)=>{
        try {
          const prod = await Products.findOne({id:req.params.id})
@@ -23,7 +22,6 @@ const getProduct = async (req,res)=>{
        }
     
 }
-
 
 const createProduct = async (req, res) => {
     try {
@@ -86,21 +84,17 @@ const registerUser = async(req,res)=>{
             email,
             password,
          })
-         res.status(200).send("User Regitred")
+        res.status(200).send("User Regitred")
 
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            res.status(200).send("Validation Error Check All Fields")
-        } else {
-            res.status(200).send('Error saving product:');
-        }
+        console.log("Error while Registreing User",error)
     }
 }
 
 const loginuser = async(req,res)=>{
    
     const user = await User.findOne({"email":req.body.email})
-    console.log(user)
+    // console.log(user)
     if(!user){
      return res.status(200).json(
         {

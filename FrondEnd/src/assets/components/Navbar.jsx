@@ -1,7 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux';
+function Navbar(props) {
 
-function Navbar() {
+  const loginSt = useSelector((state) => state.login.loginSt);
+  const loginstt = toString(loginSt)
   return (
     <nav className="navbar navbar-expand-lg bg-dark">
     <div className="container-fluid">
@@ -33,7 +36,7 @@ function Navbar() {
         </ul>
         <form className="d-flex" role="search">
           {/* <button className="btn btn-outline-success" type="submit">Search</button> */}
-          <Link to="/login"><button className="btn btn-outline-success ms-3" type="submit">Login</button></Link>
+          <Link to="/login"><button className="btn btn-outline-success ms-3" type="submit">{props.login? "Logout":"Login"}</button></Link>
         </form>
       </div>
     </div>

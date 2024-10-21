@@ -98,7 +98,7 @@ const loginuser = async(req,res)=>{
     if(!user){
      return res.status(200).json(
         {
-            message:"user not found",
+            error:"user not found",
         }
      )
     }
@@ -110,7 +110,9 @@ const loginuser = async(req,res)=>{
         
         })
     }else{
-      res.status(200).send("Email or password are incorrect")
+      res.status(400).json({
+        error:"Email or password are incorrect"}
+    )
     }
     
    

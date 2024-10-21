@@ -29,6 +29,10 @@ function Login(props) {
     event.preventDefault();
     const registerUser = await axios.post("http://localhost:8000/CURD/login", login);
     setLoginStatus(registerUser?.data);
+    console.log(registerUser.status);
+    if(registerUser?.status == 404){
+      return <h1>{registerUser?.data}</h1>
+    } 
     setLogout(true)
     setWritePermission(registerUser?.data?.writePermission); 
     props.setLogin(true)
@@ -52,7 +56,7 @@ if(logout){
   return (
     <div className='container justify-content-center align-items-center'>
       <div className=' w-100 p-3 align-middle bg-g'>
-        {<label className="col-sm-2 col-form-label">{loginStatus?.message}</label>}
+        {<label className="col-sm-2 col-form-label">{loginStatus?.message || loginStatus?.error}</label>}
         <form onSubmit={handleLogin}>
           <div className="mb-3 row">
             <div className="col-sm-5">

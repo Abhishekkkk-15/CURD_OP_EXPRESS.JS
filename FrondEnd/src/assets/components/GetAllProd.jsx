@@ -12,16 +12,14 @@ console.log(loginSt)
 const [product,setProduct] = useState([])
 const [error,setError] = useState(false)
 const [loading,setLoading] = useState(false)
-
+const [del,setDelete] = useState(false)
 
 useEffect(() => {
   (async () => {
     try {
       setLoading(true)
-
       const response = await axios.get("http://localhost:8000/CURD");
       setProduct(response.data);  
-      console.log(response.data)
       setLoading(false)
       setError(false)
     } catch (error) {
@@ -29,9 +27,10 @@ useEffect(() => {
       console.error("Error fetching data:", error);  
     }
   })(); 
-}, []);
+}, [del]);
 
 const deleteprod = async(id) =>{
+  setDelete(!del)
   try {
     const response = await axios.delete(`http://localhost:8000/CURD/${id}`)
   } catch (error) {

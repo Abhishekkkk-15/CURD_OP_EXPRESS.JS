@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios'
 import { useSelector } from 'react-redux';
 import PlcaeOrder from './PlcaeOrder';
-// import "../componentsCss/fetprod.css"
 import { Link } from 'react-router-dom';
 
 function GetAllProd() {

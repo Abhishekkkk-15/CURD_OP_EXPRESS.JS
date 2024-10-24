@@ -7,6 +7,7 @@ import {Routes,Route } from 'react-router-dom';
 import Register from './assets/components/Register.jsx'
 import Login from './assets/components/Login.jsx'
 import PlcaeOrder from './assets/components/PlcaeOrder.jsx'
+import UserInfo from './assets/components/User.jsx'
 
 function App() {
   const [login,setLogin] = useState(false)
@@ -19,6 +20,7 @@ function App() {
    <Route path={"/login"} element={<Login setLogin={setLogin} />} />
    <Route path={"/reg"} element={<Register/>}/>
    <Route path={"/buy"} element={<PlcaeOrder login={login} />}/>
+   <Route path={"/userInfo"} element={<UserInfo />}/>
   </Routes>
  </div>
   )

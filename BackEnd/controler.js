@@ -94,25 +94,35 @@ const registerUser = async(req,res)=>{
 const loginuser = async(req,res)=>{
    
     const user = await User.findOne({"email":req.body.email})
+    const userInfo = {
+        uername:user?.userName,
+        email:user?.email,
+        writePermission:user?.writePermission
+    }
     // console.log(user)
     if(!user){
-     return res.status(200).json(
-        {
+     return res.json(
+        {   
             error:"user not found",
         }
      )
     }
+
+    if(req.body.password != user.password){
+            return res.json(
+                {
+               error:"Email or password are incorrect",}
+           )      
+    }
+
     if( user.email && user.password === req.body.password){
-    res.status(200).json(
+    return res.status(200).json(
         {
+            userInfo,
             message:"User loged in",
             writePermission : user?.writePermission   
         
         })
-    }else{
-      res.status(400).json({
-        error:"Email or password are incorrect"}
-    )
     }
     
    

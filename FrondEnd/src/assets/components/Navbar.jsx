@@ -22,8 +22,8 @@ function Navbar(props) {
           </li>
         </ul>
         <form className="d-flex" role="search">
-        {props.login? <Link  to="/userinfo"><button className="btn btn-outline-success" type="submit">User</button></Link>:""}
-          <Link to="/login"><button className="btn btn-outline-success ms-3" type="submit">{props.login? "Logout":"Login"}</button></Link>
+        {/* {props.login? <Link  to="/userinfo"><button className="btn btn-outline-success" type="submit">User</button></Link>:""} */}
+          <Link to="/login"><button className="btn btn-outline-success ms-3" type="submit">{props.login? "User Info":"Login"}</button></Link>
         </form>
       </div>
     </div>

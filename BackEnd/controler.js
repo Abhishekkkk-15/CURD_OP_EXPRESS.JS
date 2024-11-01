@@ -95,9 +95,9 @@ const loginuser = async(req,res)=>{
    
     const user = await User.findOne({"email":req.body.email})
     const userInfo = {
-        uername:user?.userName,
+        username:user?.userName,
         email:user?.email,
-        writePermission:user?.writePermission
+        writePermission:user?.writePermission ? "Permium Member" : "Non-Permimum member" 
     }
     // console.log(user)
     if(!user){

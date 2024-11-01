@@ -17,7 +17,7 @@ function App() {
   <Routes>
    <Route path={"/"} element={<GetAllProd/>}/>
    <Route path={"/add"} element={<AddProd/>}/>
-   <Route path={"/login"} element={<Login setLogin={setLogin} />} />
+   <Route path={"/login"} element={<Login setLogin={setLogin} login={login} />} />
    <Route path={"/reg"} element={<Register/>}/>
    <Route path={"/buy"} element={<PlcaeOrder login={login} />}/>
    <Route path={"/userInfo"} element={<UserInfo />}/>

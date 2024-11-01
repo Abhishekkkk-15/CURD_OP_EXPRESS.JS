@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   loginSt: false,
-  userInfo:["hello"]
+  userInfo:null
 };
 
 export const loginSlice = createSlice({
@@ -18,6 +18,6 @@ export const loginSlice = createSlice({
   }
 });
 
-export const { setUserStatus } = loginSlice.actions;
+export const { setUserStatus,setUserInfo } = loginSlice.actions;
 
 export default loginSlice.reducer;  // This line is correct

@@ -1,27 +1,30 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Logout from './Logout';
 
 function UserInfo() {
-    // const dispatch = useDispatch()
-    const userinfo = useSelector(state => state.login.userInfo)
-    console.log("in",userinfo)
-    return (<>
-        <div className="card text-center mt-5">
-            <div className="card-header">
-                User Information
+    const userinfo = useSelector(state => state.login.userInfo);
+    console.log("in", userinfo);
+
+    return (
+        <>
+            <div className="card text-center mt-5 shadow-lg border-0" style={{ maxWidth: '400px', margin: 'auto' }}>
+                <div className="card-header bg-primary text-white font-weight-bold">
+                    User Information
+                </div>
+                <div className="card-body p-4">
+                    <h5 className="card-title mb-3 text-secondary">Name: <span className="text-dark">{userinfo?.username}</span></h5>
+                    <p className="card-text text-secondary">Email: <span className="text-dark">{userinfo?.email}</span></p>
+                    <p className="card-text text-secondary">Membership: <span className="text-dark">{userinfo?.writePermission}</span></p>
+                </div>
+                <div className="card-footer text-muted font-italic">
+                    Thank you for visiting!
+                </div>
             </div>
-            <div className="card-body">
-                <h5 className="card-title">Name : {userinfo?.username}</h5>
-                <p className="card-text">Email : {userinfo?.email}</p>
-                <p className="card-text">MemberShip :  {userinfo?.writePermission}</p>
+            <div className="d-flex justify-content-center mt-3">
+                <Logout />
             </div>
-            <div className="card-footer text-muted">
-                Thank you for visiting!
-            </div>
-        </div>
-        <Logout />
-    </>
+        </>
     );
 }
 

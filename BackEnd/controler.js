@@ -1,4 +1,9 @@
 import { Products, User } from "./schema.js";
+import { config } from 'dotenv';
+import jwt from "jsonwebtoken";
+
+// Load .env variables
+config();
 
 const getProducts =async(req,res)=>{
     const prod = await Products.find();
@@ -38,7 +43,7 @@ const createProduct = async (req, res) => {
     }
 }
 
-const updateProduct = async (req,res)=>{
+const updateProduct = async (req,res)=>{s
    try {
      const id = req.params.id
      const dataFromBody = req.body
@@ -115,9 +120,29 @@ const loginuser = async(req,res)=>{
            )      
     }
 
+    //Generating Access Token by JWT
+    const accessToken = jwt.sign(
+        {userId: user._id, email: user.email},
+        process.env.JWT_SECRET,
+        {expiresIn : "2m"}
+    )
+
+    const refreshToken = jwt.sign(
+        {userId: user._id, email: user.email},
+        process.env.JWT_REFRESH_SECRET,
+        {expiresIn : "7d"}
+    )
+
+  
     if( user.email && user.password === req.body.password){
-    return res.status(200).json(
+    return res.status(200).cookie('refreshToken',refreshToken,{
+        httpOnly:true,
+        secure: true,
+        // maxAge: 7*24*60*60*1000,
+        // sameSite:'strict'
+    }).json(
         {
+            accessToken,
             userInfo,
             message:"User loged in",
             writePermission : user?.writePermission   

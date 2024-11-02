@@ -56,7 +56,7 @@ if(error){
           product.map((prod, index) => (
             <div className="col-md-4 mb-4" key={index}>
               <div className="card" style={{ width: "18rem" }}>
-                <img src={prod.image} className="card-img-top" alt={prod.title} />
+                <img src="https://tse3.mm.bing.net/th?id=OIP.7z35PwLv3EpFu4lA0bafsgHaE_&pid=Api&P=0&w=300&h=300" className="card-img-top" alt={prod.title} />
                 <div className="card-body">
                   <h5 className="card-title">{prod.title}</h5>
                   <h6 className="card-subtitle mb-2 text-muted">Price: &#x20b9;{prod.price}</h6>

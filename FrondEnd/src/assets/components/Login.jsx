@@ -27,7 +27,9 @@ function Login(props) {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post("http://localhost:8000/CURD/login", login);
+      const { data } = await axios.post("http://localhost:8000/CURD/login", login,{
+        withCredentials: true // This is crucial for cookie handling
+    });
 
       if (data?.error) {
         setLoginStatus(data?.error);
@@ -66,37 +68,35 @@ function Login(props) {
   }
 
   return (
-    <div className="container justify-content-center align-items-center">
-      <div className="w-100 p-3 align-middle bg-g">
-        <label className="col-sm-2 col-form-label">{loginStatus}</label>
-        <form onSubmit={handleLogin}>
-          <div className="mb-3 row">
-            <div className="col-sm-5">
-              <input
-                type="text"
-                placeholder="Email or Username"
-                className="form-control-plaintext"
-                name="email"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="mb-3 row">
-            <div className="col-sm-5">
-              <input
-                type="password"
-                placeholder="Password"
-                className="form-control"
-                name="password"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <button className="btn btn-primary btn-block">Login</button>
-        </form>
-        <p className="mt-3"><Link to={"/reg"}>Sign in?</Link></p>
-      </div>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="card shadow-lg p-4 w-50">
+      <label className="h5 text-center text-primary mb-4">{loginStatus}</label>
+      <form onSubmit={handleLogin}>
+        <div className="mb-3">
+          <input
+            type="text"
+            placeholder="Email or Username"
+            className="form-control"
+            name="email"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <input
+            type="password"
+            placeholder="Password"
+            className="form-control"
+            name="password"
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary w-100">Login</button>
+      </form>
+      <p className="mt-3 text-center">
+        <Link to="/reg" className="text-secondary">Sign in?</Link>
+      </p>
     </div>
+  </div>
   );
 }
 

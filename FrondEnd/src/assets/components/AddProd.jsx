@@ -26,7 +26,9 @@ function AddProd() {
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent form submission from reloading the page
     try {
-      await axios.post("http://localhost:8000/CURD", product);
+      await axios.post("http://localhost:8000/CURD", product,{
+        withCredentials: true // This is crucial for cookie handling
+    });
       console.log("Product Created");
       setError(false);
     } catch (err) {
@@ -46,6 +48,15 @@ function AddProd() {
         <form onSubmit={handleSubmit} className='form'>
           <h1 className='mb-4 text-center'>Add Your Product</h1>
 
+          <div className='mb-3'>
+            <input
+              className='form-control'
+              placeholder='Enter Id'
+              type='file'
+              // name='id'
+              // onChange={handleChange}
+            />
+          </div>
           <div className='mb-3'>
             <input
               className='form-control'

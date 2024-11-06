@@ -79,6 +79,7 @@ function Login(props) {
             className="form-control"
             name="email"
             onChange={handleChange}
+            required={true}
           />
         </div>
         <div className="mb-3">
@@ -88,6 +89,7 @@ function Login(props) {
             className="form-control"
             name="password"
             onChange={handleChange}
+            required={true}
           />
         </div>
         <button type="submit" className="btn btn-primary w-100">Login</button>

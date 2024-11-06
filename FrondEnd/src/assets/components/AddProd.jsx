@@ -27,7 +27,7 @@ function AddProd() {
     event.preventDefault(); // Prevent form submission from reloading the page
     try {
       await axios.post("http://localhost:8000/CURD", product,{
-        withCredentials: true // This is crucial for cookie handling
+        withCredentials: true ,headers: { "Content-Type": "multipart/form-data" }// This is crucial for cookie handling // this header is also important for file Uplaoding
     });
       console.log("Product Created");
       setError(false);

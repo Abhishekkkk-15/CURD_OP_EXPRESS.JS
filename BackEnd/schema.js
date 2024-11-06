@@ -28,6 +28,9 @@ const productsSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const userSchema = new mongoose.Schema({
+    avatar:{
+        type:String
+    },
     userName: {
         type: String,
         required: true,

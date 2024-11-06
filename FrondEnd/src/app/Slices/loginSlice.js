@@ -20,4 +20,4 @@ export const loginSlice = createSlice({
 
 export const { setUserStatus,setUserInfo } = loginSlice.actions;
 
-export default loginSlice.reducer;  // This line is correct
+export default loginSlice.reducer; 

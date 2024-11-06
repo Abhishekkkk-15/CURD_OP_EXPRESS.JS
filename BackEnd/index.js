@@ -1,10 +1,12 @@
-import express from 'express';
+import express, { urlencoded } from 'express';
 import userRouter from './routs.js';
 import connectDB from './db.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 const  app = express()
 const port = 8000
+
+
 
 app.use(cors({
      origin: 'http://localhost:5173', // Adjust this to your frontend URL

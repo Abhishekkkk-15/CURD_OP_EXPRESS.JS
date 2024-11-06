@@ -1,6 +1,9 @@
 import { Products, User } from "./schema.js";
 import { config } from 'dotenv';
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import { uploadOnCloudinary } from "./cloudinary.js";
+
 
 // Load .env variables
 config();
@@ -73,7 +76,7 @@ const replaceProduct = async (req,res)=>{
         return res.status(500).send(`Server Error ${error.message}`)
         // return  res.status(status).send(body)
 
-    }
+    }   
 }
 
 const deleteProduct = async (req,res)=>{
@@ -82,15 +85,33 @@ const deleteProduct = async (req,res)=>{
 }
 
 const registerUser = async(req,res)=>{
-     const { email,password,userName} = req.body
+     const { email,password,userName} = req.body;
+     const existedUser = await User.findOne({
+        $or: [{ userName }, {email}]    // $or is mongodb query which check if even one condition is true
+    })
+
+    console.log(req.file);
+    
+
+    if(existedUser){
+        return res.status(200).send("User and Email Already Exists!!")
+    }
+
+    const avatarLocalPath = req.file?.path;
+
+    if(!avatarLocalPath){
+         return res.status(200).send("Avatar is Required")  
+    }
+
     try {
+        const avatar = await uploadOnCloudinary(avatarLocalPath)
          await User.create({
+            avatar,
             userName,
             email,
             password,
          })
         res.status(200).send("User Regitred")
-
     } catch (error) {
         console.log("Error while Registreing User",error)
     }
@@ -102,7 +123,8 @@ const loginuser = async(req,res)=>{
     const userInfo = {
         username:user?.userName,
         email:user?.email,
-        writePermission:user?.writePermission ? "Permium Member" : "Non-Permimum member" 
+        writePermission:user?.writePermission ? "Admin" : "User" ,
+        avatar:user?.avatar
     }
     // console.log(user)
     if(!user){

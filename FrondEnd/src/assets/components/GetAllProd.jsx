@@ -37,6 +37,10 @@ const deleteprod = async(id) =>{
   }
 }
 
+const addToCart = (id) =>{
+  console.log("add To cart")
+}
+
 console.log(product.length == 0);
 
 
@@ -74,13 +78,19 @@ if (!Array.isArray(product) || product.length === 0) {
                 <Link to="/buy">
                   <button className="btn btn-outline-primary btn-sm">Buy Now</button>
                 </Link>
-                <button 
+               { loginSt?<button 
                   className="btn btn-outline-danger btn-sm" 
                   onClick={() => deleteprod(prod._id)} 
                   disabled={!loginSt}
                 >
                   Delete
-                </button>
+                </button>:
+                 <button 
+                  className="btn btn-outline-danger btn-sm" 
+                  onClick={() => addToCart(prod._id)}
+                >
+                  Add to Cart
+                </button>}
               </div>
             </div>
           </div>

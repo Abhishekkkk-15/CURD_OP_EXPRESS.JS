@@ -6,12 +6,11 @@ import { Link, useNavigate } from 'react-router-dom';
 function PlaceOrder() {
     const navigate = useNavigate();
     const logOrNot = useSelector((state) => state.login.logOrNot);
-    console.log(logOrNot)
 
     const handleBuyNow = () => {
         if (logOrNot) {
             alert('Proceeding to payment...');
-            navigate('/checkout');
+            // navigate('');
         } else {
             alert('Please login first!');
             navigate('/login');

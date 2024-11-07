@@ -9,7 +9,7 @@ const router = Router();
 //Routes For  
 router.route("/").get(getProducts)
 router.route("/:id").get(getProduct)
-router.route("/").post(verifyAccessToken,createProduct)
+router.route("/").post(upload.single("thumbnail"),createProduct)
 router.route("/:id").patch(updateProduct)
 router.route("/:id").put(replaceProduct)
 router.route("/:id").delete(deleteProduct)

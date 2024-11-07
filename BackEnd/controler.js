@@ -32,15 +32,27 @@ const getProduct = async (req,res)=>{
 }
 
 const createProduct = async (req, res) => {
+    console.log("Req.file : ",req.file);
+    const thumbnaillocalPath = req.file?.path
+    console.log("localPathThum",thumbnaillocalPath);
+    
+
+    if(!thumbnaillocalPath){
+        return res.status(200).send("Thumbnail is required!")
+    }
+
     try {
+        const thumbnail = await uploadOnCloudinary(thumbnaillocalPath)
+        console.log(thumbnail);
         await Products.create({
             id:req.body.id,
             title : req.body.title,
             description :req.body.description,
             price :req.body.price,
-            category:req.body.category
+            category:req.body.category,
+            thumbnail
         })
-        res.status(200).send("Product Created")
+        res.status(200).send("Product Createsssd")
     } catch (error) {
         res.send(`Error : ${error.message}`)
     }

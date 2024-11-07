@@ -10,16 +10,16 @@ import PlcaeOrder from './assets/components/PlcaeOrder.jsx'
 import UserInfo from './assets/components/User.jsx'
 
 function App() {
-  const [login,setLogin] = useState(false)
+  // const [login,setLogin] = useState(false)
   return (
  <div>
-  <Navbar login={login}/>
+  <Navbar />
   <Routes>
    <Route path={"/"} element={<GetAllProd/>}/>
    <Route path={"/add"} element={<AddProd/>}/>
-   <Route path={"/login"} element={<Login setLogin={setLogin} login={login} />} />
+   <Route path={"/login"} element={<Login />} />
    <Route path={"/reg"} element={<Register/>}/>
-   <Route path={"/buy"} element={<PlcaeOrder login={login} />}/>
+   <Route path={"/buy"} element={<PlcaeOrder  />}/>
    <Route path={"/userInfo"} element={<UserInfo />}/>
   </Routes>
  </div>

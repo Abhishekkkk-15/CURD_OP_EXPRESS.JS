@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserStatus, setUserInfo } from '../../app/Slices/loginSlice';
+import { setUserStatus, setUserInfo,setLogOrNot } from '../../app/Slices/loginSlice';
 import UserInfo from "./User"
 
-function Login(props) {
+function Login() {
   const dispatch = useDispatch();
   const [login, setLogin] = useState({});
   const [loginStatus, setLoginStatus] = useState('');
   const [writePermission, setWritePermission] = useState(false);
   const [logout, setLogout] = useState(false);
-  // const [userInfo, setUserInfo] = useState({});
 
   const loginSt = useSelector((state) => state.login.loginSt);
+  const logOrNot = useSelector((state) => state.login.logOrNot);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,13 +36,10 @@ function Login(props) {
         return;
       }
 
-      // Set user info and permissions from response data
-      // setUserInfo(data.userInfo);
       setWritePermission(data.writePermission);
       setLogout(true);
-      props.setLogin(true);
-
-      // Dispatch Redux action to update user info and status
+      
+      dispatch(setLogOrNot(true))
       dispatch(setUserInfo(data.userInfo));
       dispatch(setUserStatus(data.writePermission));
 
@@ -52,18 +49,11 @@ function Login(props) {
     }
   };
 
-  // Log userInfo whenever it updates
-  // useEffect(() => {
-  //   if ( Object.keys(userInfo).length > 0) {
-  //     console.log('Updated User Info:', userInfo);
-  //   }
-  // }, []);
-
   const handleLogout = () => {
     navigate('/login');
   };
 
-  if(props?.login) {
+  if(logOrNot) {
     return <UserInfo />;
   }
 

@@ -22,7 +22,6 @@ const uploadOnCloudinary = async (localFilePath) => {
     
     // Log the uploaded image's secure URL
     console.log("File uploaded successfully:", uploadResponse.secure_url);
-    // fs.unlinkSync(localFilePath);
     // Return the secure URL to save in the database
     return uploadResponse.secure_url;
   } catch (error) {

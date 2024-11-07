@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 function AddProd() {
-
   const [product, setProduct] = useState({
     id: '',
     title: '',
@@ -11,7 +10,7 @@ function AddProd() {
     category: '',
     description: ''
   });
-
+  const [thumbnail, setThumbnail] = useState(null);
   const [error, setError] = useState(false);
   const loginSt = useSelector(state => state.login.loginSt);
 
@@ -23,20 +22,31 @@ function AddProd() {
     }));
   };
 
+  const handleFileChange = (e) => {
+    setThumbnail(e.target.files[0]); 
+  };
+
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent form submission from reloading the page
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('id', product.id);
+    formData.append('title', product.title);
+    formData.append('price', product.price);
+    formData.append('category', product.category);
+    formData.append('description', product.description);
+    formData.append('thumbnail', thumbnail);
+
     try {
-      await axios.post("http://localhost:8000/CURD", product,{
-        withCredentials: true ,headers: { "Content-Type": "multipart/form-data" }// This is crucial for cookie handling // this header is also important for file Uplaoding
-    });
-      console.log("Product Created");
+      await axios.post("http://localhost:8000/CURD", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
       setError(false);
     } catch (err) {
       console.error("Error while adding product", err);
       setError(true);
     }
   };
-
 
   if (!loginSt) {
     return <h1 className='text-center mt-5'>You are not authorized to Add Products</h1>;
@@ -51,20 +61,23 @@ function AddProd() {
           <div className='mb-3'>
             <input
               className='form-control'
-              placeholder='Enter Id'
+              placeholder='Upload Thumbnail'
               type='file'
-              // name='id'
-              // onChange={handleChange}
+              name='thumbnail'
+              onChange={handleFileChange} 
+              required
             />
           </div>
+
           <div className='mb-3'>
             <input
               className='form-control'
               placeholder='Enter Id'
               type='text'
               name='id'
-              value={product.id} 
+              value={product.id}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -76,6 +89,7 @@ function AddProd() {
               name='title'
               value={product.title}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -87,6 +101,7 @@ function AddProd() {
               name='price'
               value={product.price}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -96,8 +111,9 @@ function AddProd() {
               placeholder='Enter Category'
               type='text'
               name='category'
-              value={product.category} 
+              value={product.category}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -106,13 +122,14 @@ function AddProd() {
               className='form-control'
               placeholder='Enter Description'
               name='description'
-              value={product.description} 
+              value={product.description}
               onChange={handleChange}
+              required
             ></textarea>
           </div>
 
           <button type='submit' className='btn btn-primary btn-block'>
-            Add Products
+            Add Product
           </button>
         </form>
 

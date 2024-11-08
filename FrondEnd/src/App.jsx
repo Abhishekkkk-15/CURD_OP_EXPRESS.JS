@@ -8,6 +8,8 @@ import Register from './assets/components/Register.jsx'
 import Login from './assets/components/Login.jsx'
 import PlcaeOrder from './assets/components/PlcaeOrder.jsx'
 import UserInfo from './assets/components/User.jsx'
+import ShowProduct from './assets/components/showProduct.jsx'
+
 
 function App() {
   // const [login,setLogin] = useState(false)
@@ -21,6 +23,7 @@ function App() {
    <Route path={"/reg"} element={<Register/>}/>
    <Route path={"/buy"} element={<PlcaeOrder  />}/>
    <Route path={"/userInfo"} element={<UserInfo />}/>
+   <Route path={"/showProduct"} element={<ShowProduct />}/>
   </Routes>
  </div>
   )

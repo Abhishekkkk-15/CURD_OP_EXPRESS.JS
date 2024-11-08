@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProduct, deleteProduct, getProduct,loginuser, getProducts, replaceProduct,registerUser, updateProduct } from "./controler.js";
+import { createProduct, deleteProduct, getProduct,loginuser, getProducts, replaceProduct,registerUser, updateProduct,addToCart } from "./controler.js";
 import { verifyAccessToken } from "./middleware.js";
 import { upload } from "./middleware.js";
 
@@ -15,5 +15,6 @@ router.route("/:id").put(replaceProduct)
 router.route("/:id").delete(deleteProduct)
 router.route("/reg").post(upload.single("avatar"),registerUser)
 router.route("/login").post(loginuser)
+router.route("/addToCart").post(addToCart)
 
 export default router

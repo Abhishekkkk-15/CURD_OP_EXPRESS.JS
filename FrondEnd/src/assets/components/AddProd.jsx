@@ -42,6 +42,7 @@ function AddProd() {
         headers: { "Content-Type": "multipart/form-data" }
       });
       setError(false);
+      alert("Product Added Successfully!!")
     } catch (err) {
       console.error("Error while adding product", err);
       setError(true);

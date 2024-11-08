@@ -1,0 +1,44 @@
+/* General styles */
+.container-fluid {
+    background-color: #f7f7f7;
+  }
+  
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+  
+  .form-control {
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 16px;
+  }
+  
+  .btn-dark {
+    background-color: #333;
+    border-color: #333;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 18px;
+  }
+  
+  .btn-dark:hover {
+    background-color: #222;
+    border-color: #222;
+  }
+  
+  .text-muted {
+    font-size: 14px;
+  }
+  
+  h6 {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  img {
+    height: auto;
+    max-width: 100%;
+  }
+  

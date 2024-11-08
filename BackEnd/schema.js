@@ -57,7 +57,8 @@ const userSchema = new mongoose.Schema({
     writePermission: {
         type: Boolean, 
         default: false 
-    }
+    },
+    userCart:[String]
 }, { timestamps: true });
 
 export const Products = mongoose.model('Products',productsSchema);

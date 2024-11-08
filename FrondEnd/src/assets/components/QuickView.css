@@ -1,0 +1,23 @@
+/* QuickView.css */
+.modal {
+    z-index: 1050;
+  }
+  
+  .modal-dialog {
+    max-width: 800px;
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .close {
+    font-size: 1.5rem;
+    color: #000;
+    opacity: 1;
+  }
+  
+  .modal-body {
+    padding: 2rem;
+  }
+  

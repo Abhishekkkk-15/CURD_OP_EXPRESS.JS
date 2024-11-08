@@ -32,10 +32,9 @@ function Navbar() {
 
           {logOrNot ? (
                         <div className="d-flex align-items-center ms-3">
-                            {/* Profile Image */}
                             <Link to="/userInfo" className="text-white ms-2">
                             <img 
-                                src={userInfo?.avatar || '/default-avatar.png'} 
+                                src={userInfo?.avatar || 'https://i.pinimg.com/736x/15/2d/4b/152d4b093faa2ea3af8e098516fbf037.jpg'} 
                                 alt="Profile" 
                                 className="rounded-circle" 
                                 style={{ width: '35px', height: '35px', objectFit: 'cover', border: '2px solid white' }}

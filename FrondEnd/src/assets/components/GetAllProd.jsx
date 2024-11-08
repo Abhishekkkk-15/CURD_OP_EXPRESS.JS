@@ -15,7 +15,6 @@ function GetAllProd() {
   const [showModal, setShowModal] = useState(false); // To control Quick View Modal visibility
   const [selectedProduct, setSelectedProduct] = useState(null); // Store selected product for Quick View
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -43,9 +42,8 @@ function GetAllProd() {
   };
 
   const showProduct = (prod) => {
-    console.log(prod);  // Add this line to log the selected product
     setSelectedProduct(prod);
-    setShowModal(true); // Trigger Quick View modal
+    setShowModal(true);
   };
 
   const setprod = (index) => {

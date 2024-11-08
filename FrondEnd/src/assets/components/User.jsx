@@ -20,7 +20,14 @@ function UserInfo() {
                                 className="avatar-img" 
                             />
                         ) : (
-                            <div className="text-secondary">No Avatar Available</div>
+                            
+                            <div className="text-secondary">
+                            <img 
+                                src={"https://i.pinimg.com/736x/15/2d/4b/152d4b093faa2ea3af8e098516fbf037.jpg"} 
+                                alt="Avatar" 
+                                className="avatar-img" 
+                            />
+                            <span>No Avatar Available</span></div>
                         )}
                     </div>
 

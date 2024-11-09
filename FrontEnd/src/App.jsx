@@ -8,8 +8,7 @@ import Register from './assets/components/Register.jsx'
 import Login from './assets/components/Login.jsx'
 import PlcaeOrder from './assets/components/PlcaeOrder.jsx'
 import UserInfo from './assets/components/User.jsx'
-import ShowProduct from './assets/components/showProduct.jsx'
-
+import ShowProduct from './assets/components/ShowProduct.jsx'
 
 function App() {
   // const [login,setLogin] = useState(false)

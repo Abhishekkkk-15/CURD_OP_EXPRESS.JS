@@ -10,12 +10,12 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        {/* Brand / Logo (optional, add your brand name or logo here) */}
+       
         <Link className="navbar-brand" to="/">
           E-Commerce
         </Link>
 
-        {/* Toggler button for mobile view */}
+       
         <button
           className="navbar-toggler"
           type="button"
@@ -28,7 +28,7 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Collapsible navbar links */}
+       
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
@@ -43,7 +43,7 @@ function Navbar() {
             </li>
           </ul>
 
-          {/* Cart Icon */}
+         
           <Link to="#">
             <button className="btn btn-outline-success ms-3" type="button">
               <svg
@@ -59,7 +59,7 @@ function Navbar() {
             </button>
           </Link>
 
-          {/* User profile / Login button */}
+         
           {logOrNot ? (
             <div className="d-flex align-items-center ms-3">
               <Link to="/userInfo" className="text-white ms-2">

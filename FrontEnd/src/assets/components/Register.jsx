@@ -11,7 +11,7 @@ function Register() {
 
         setReg((prev) => ({
             ...prev,
-            [name]: name === 'avatar' ? files[0] : value, // Handling file input separately
+            [name]: name === 'avatar' ? files[0] : value, 
         }));
     };
 
@@ -19,7 +19,7 @@ function Register() {
         event.preventDefault();
 
         const formData = new FormData();
-        formData.append("avatar", reg.avatar); // Append the avatar file
+        formData.append("avatar", reg.avatar);
         formData.append("userName", reg.userName);
         formData.append("email", reg.email);
         formData.append("password", reg.password);

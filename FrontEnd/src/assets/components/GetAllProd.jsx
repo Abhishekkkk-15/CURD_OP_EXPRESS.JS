@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setProductt } from '../../app/Slices/productSlice';
-import QuickView from './QuickView'; // Import the QuickView component
+import QuickView from './QuickView'; 
 
 function GetAllProd() {
   const loginSt = useSelector(state => state.login.loginSt);

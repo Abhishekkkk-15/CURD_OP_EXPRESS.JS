@@ -10,7 +10,7 @@ function PlaceOrder() {
     const handleBuyNow = () => {
         if (logOrNot) {
             alert('Proceeding to payment...');
-            // navigate('');
+           
         } else {
             alert('Please login first!');
             navigate('/login');

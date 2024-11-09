@@ -27,11 +27,7 @@ function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-<<<<<<< HEAD
-      const { data } = await axios.post("http://localhost:8000/CURD/login", login,{
-=======
       const { data } = await axios.post("https://funecommerceserver.onrender.com/CURD/login", login,{
->>>>>>> 7e2812e75a92561e06aaa4c255b72ee3175a0ef2
         withCredentials: true // This is crucial for cookie handling
     });
 

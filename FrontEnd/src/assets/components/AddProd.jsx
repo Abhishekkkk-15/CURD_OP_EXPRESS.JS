@@ -38,7 +38,7 @@ function AddProd() {
     formData.append('thumbnail', thumbnail);
 
     try {
-      await axios.post("http://localhost:8000/CURD", formData, {
+      await axios.post("https://funecommerceserver.onrender.com/CURD", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       setError(false);

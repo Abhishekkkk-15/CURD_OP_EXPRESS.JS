@@ -21,7 +21,7 @@ function GetAllProd() {
     (async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:8000/CURD");
+        const response = await axios.get("https://funecommerceserver.onrender.com/CURD");
         setProduct(response.data);
         setLoading(false);
         setError(false);

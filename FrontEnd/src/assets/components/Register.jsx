@@ -25,7 +25,7 @@ function Register() {
         formData.append("password", reg.password);
 
         try {
-            const response = await axios.post("http://localhost:8000/CURD/reg", formData, {
+            const response = await axios.post("https://funecommerceserver.onrender.com/CURD/reg", formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             setuserRegi(response?.data);

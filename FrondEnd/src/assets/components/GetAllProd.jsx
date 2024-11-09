@@ -47,7 +47,6 @@ function GetAllProd() {
   };
 
   const setprod = (index) => {
-    console.log("Selected Product:", product[index]);  // Check what you're dispatching
     dispatch(setProductt(product[index]));
   };
 

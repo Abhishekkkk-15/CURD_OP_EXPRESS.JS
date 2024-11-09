@@ -3,13 +3,16 @@ import userRouter from './routs.js';
 import connectDB from './db.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { config } from 'dotenv';
+
+config();
+
 const  app = express()
-const port = 8000
 
 
 
 app.use(cors({
-     origin: 'http://localhost:5173', // Adjust this to your frontend URL
+     origin: ['https://funecommerce.vercel.app','http://localhost:5173'], // Adjust this to your frontend URL
      credentials: true // Allow credentials (cookies)
  }))
 app.use(cookieParser())
@@ -28,7 +31,7 @@ app.use("/CURD",userRouter)
 
 
 
-app.listen(port,()=>{
-    console.log("server Started",port)
+app.listen(process.env.PORT || 8000,()=>{
+    console.log("server Started",process.env.PORT)
 })
 

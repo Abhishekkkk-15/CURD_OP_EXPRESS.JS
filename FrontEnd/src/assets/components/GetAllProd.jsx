@@ -17,6 +17,7 @@ function GetAllProd() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    
     (async () => {
       try {
         setLoading(true);

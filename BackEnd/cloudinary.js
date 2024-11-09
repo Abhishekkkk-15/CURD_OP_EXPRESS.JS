@@ -1,10 +1,14 @@
 import { v2 as cloudinary } from "cloudinary";
+import { log } from "console";
 import fs from 'fs';
+import { config  as econfig} from 'dotenv';
+
+econfig();
 
 cloudinary.config({
-  cloud_name: "dha7ofrer",
-  api_key: "384591845655678",
-  api_secret: "XI1gA2uTSldTNa9e68if_M9Sz4s",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
   secure: true,
 });
 

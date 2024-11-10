@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import RequestAdmin from './RequestAdmin';
+import { Link } from 'react-router-dom';
 
 function AddProd() {
 const userInfo = useSelector(state=> state.login.userInfo)
@@ -53,7 +55,7 @@ const userInfo = useSelector(state=> state.login.userInfo)
 useEffect(()=>{
   (async()=>{
     try {
-      await axios.post("http://localhost:8000/CURD/admin-route",{},{withCredentials: true}); //this helps to send cookies to backend server
+      await axios.post("https://funecommerceserver.onrender.com/CURD/admin-route",{},{withCredentials: true}); //this helps to send cookies to backend server
       setAdmin(true)
     } catch (error) {
       setAdmin(false)
@@ -63,8 +65,13 @@ useEffect(()=>{
 },[])
 
 if (!checkAdmin) {
-    return <h1 className='text-center mt-5'>You are not authorized to Add Products</h1>;
+  return <h1 className='text-center mt-5'>You are not authorized to Add Products send Admin request <Link to="/requestAdmin">Admin</Link></h1>;
   }
+console.log(userInfo.writePermission)
+
+if(userInfo.writePermission){
+  <RequestAdmin userInfo={userInfo}/>
+}  
 
   return (
     <>
@@ -89,7 +96,7 @@ if (!checkAdmin) {
               placeholder='Enter Id'
               type='text'
               name='sellerName'
-              value={userInfo.userName}
+              value={userInfo.userName || "User Name"}
               onChange={handleChange}
               readOnly
             />
@@ -101,7 +108,7 @@ if (!checkAdmin) {
               placeholder='Enter Title'
               type='text'
               name='title'
-              value={product.title}
+              value={product.title || "Product title"}
               onChange={handleChange}
               required
             />
@@ -113,7 +120,7 @@ if (!checkAdmin) {
               placeholder='Enter Price'
               type='text'
               name='price'
-              value={product.price}
+              value={product.price || "Product Price"}
               onChange={handleChange}
               required
             />
@@ -125,7 +132,7 @@ if (!checkAdmin) {
               placeholder='Enter Category'
               type='text'
               name='category'
-              value={product.category}
+              value={product.category || "Product Price"}
               onChange={handleChange}
               required
             />
@@ -136,7 +143,7 @@ if (!checkAdmin) {
               className='form-control'
               placeholder='Enter Description'
               name='description'
-              value={product.description}
+              value={product.description || "Product Price"}
               onChange={handleChange}
               required
             ></textarea>

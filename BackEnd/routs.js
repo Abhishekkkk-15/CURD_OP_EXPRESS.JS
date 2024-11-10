@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProduct, deleteProduct, getProduct,loginuser, getProducts, replaceProduct,registerUser, updateProduct,addToCart ,getUserInfo, logOut} from "./controler.js";
+import { createProduct, deleteProduct, getProduct,loginuser, getProducts, replaceProduct,registerUser, updateProduct,addToCart ,getUserInfo, logOut,sendMailForProductAddPermission} from "./controler.js";
 import { authenticateToken, checkAdmin, addProductPermission } from "./middleware.js";
 import { upload } from "./middleware.js";
 
@@ -21,5 +21,6 @@ router.route("/userInfo").post(authenticateToken,getUserInfo)
 router.route("/admin-route").post(authenticateToken,addProductPermission,(req,res)=>{
     res.send("This is an admin-only route.")
 })
+router.route('/request-admin').post(authenticateToken,sendMailForProductAddPermission)
     
 export default router

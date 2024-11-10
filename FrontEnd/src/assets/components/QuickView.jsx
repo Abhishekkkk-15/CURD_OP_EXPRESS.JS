@@ -11,7 +11,7 @@ const QuickView = ({ product, closeModal, addToCart }) => {
       <div className="modal-dialog modal-lg" onClick={(e) => e.stopPropagation()}>
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">{product.title}</h5>
+            <h5 className="modal-title">{product.title || "Product Title"}</h5>
             <button type="button" className="close" onClick={closeModal}>
               <span>&times;</span>
             </button>
@@ -22,16 +22,16 @@ const QuickView = ({ product, closeModal, addToCart }) => {
                 <img
                   src={product.thumbnail || "https://via.placeholder.com/600x400"}
                   className="img-fluid"
-                  alt={product.title}
+                  alt={product.title || "Product Title"}
                   style={{ objectFit: 'contain', height: 'auto' }}
                 />
               </div>
               <div className="col-md-6">
-                <h4>Price: ₹{product.price}</h4>
-                <p>{product.description}</p>
+                <h4>Price: ₹{product.price || "Product Price"}</h4>
+                <p>{product.description || "Product Descripition"}</p>
                 <div className="d-flex justify-content-between">
                   <Link to="/buy"><button className="btn btn-primary">Buy Now</button></Link>
-                  <button className="btn btn-success" onClick={() => addToCart(product._id)}>Add to Cart</button>
+                  <button className="btn btn-success" onClick={() => addToCart(product._id || "id")}>Add to Cart</button>
                 </div>
               </div>
             </div>

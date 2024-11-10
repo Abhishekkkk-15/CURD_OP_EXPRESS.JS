@@ -9,9 +9,10 @@ import Login from './assets/components/Login.jsx'
 import PlcaeOrder from './assets/components/PlcaeOrder.jsx'
 import UserInfo from './assets/components/User.jsx'
 import ShowProduct from './assets/components/ShowProduct.jsx'
+import RequestAdmin from './assets/components/RequestAdmin.jsx'
 
 function App() {
-  // const [login,setLogin] = useState(false)
+
   return (
  <div>
   <Navbar />
@@ -23,6 +24,7 @@ function App() {
    <Route path={"/buy"} element={<PlcaeOrder  />}/>
    <Route path={"/userInfo"} element={<UserInfo />}/>
    <Route path={"/showProduct"} element={<ShowProduct />}/>
+   <Route path={"/requestAdmin"} element={<RequestAdmin />}/>
   </Routes>
  </div>
   )

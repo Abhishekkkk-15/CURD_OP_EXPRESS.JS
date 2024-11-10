@@ -42,15 +42,14 @@ useEffect(()=>{
                   className="rounded-circle" 
                   style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
                 />
-                <span>No Avatar Available</span>
               </div>
             )}
           </div>
 
          
-          <h5 className="card-title mb-3">{userInfo?.userName}</h5>
+          <h5 className="card-title mb-3">{userInfo?.userName || "User Name"}</h5>
           <div className="info-container mb-3">
-            <p className="card-text text-muted">Email: <span className="text-dark">{userInfo?.email}</span></p>
+            <p className="card-text text-muted">Email: <span className="text-dark">{userInfo?.email || "User Email"}</span></p>
             <p className="card-text text-muted">Member: <span className="text-dark">{userInfo?.writePermission ? 'Premium ' : 'Non-Premium '}</span></p>
           </div>
         </div>

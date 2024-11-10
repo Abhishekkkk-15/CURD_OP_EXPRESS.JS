@@ -3,7 +3,8 @@ import { config } from 'dotenv';
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import { uploadOnCloudinary } from "./cloudinary.js";
-
+import nodemailer from "nodemailer"
+import { text } from "express";
 
 // Load .env variables
 config();
@@ -126,7 +127,7 @@ const loginuser = async (req, res) => {
 
     const user = await User.findOne({ "email": req.body.email })
     const userInfo = {
-        username: user?.userName,
+        userName: user?.userName,
         email: user?.email,
         writePermission: user?.writePermission,
         avatar: user?.avatar,
@@ -230,6 +231,35 @@ const addToCart = async (req, res) => {
     }
 }
 
+const sendMailForProductAddPermission = async (req,res) =>{
+
+    const {userName, email} = req.user;
+    console.log(userName,email)
+    const message = req.body.message;
+    let transporter = nodemailer.createTransport({
+        service:"Gmail", 
+        auth:{
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+
+    const mailOptions = {
+        from: email,
+        to: "mrabhi748@gmail.com",
+        subject: "Permission Request",
+        text:`Name : ${userName}\nEmail:${email}\n${message}`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).send("Mail Sent Successfully");
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
+
 export {
     getProducts,
     getProduct,
@@ -241,5 +271,6 @@ export {
     loginuser,
     addToCart,
     getUserInfo,
-    logOut
+    logOut,
+    sendMailForProductAddPermission
 }

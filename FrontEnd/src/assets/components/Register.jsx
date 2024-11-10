@@ -49,7 +49,7 @@ function Register() {
     {userRegi && (
         <div className="alert alert-success d-flex align-items-center mb-4 p-2" role="alert">
             <i className="bi bi-check-circle-fill me-2"></i>
-            <label className="col-form-label fw-bold" style={{ fontSize: '1.1em' }}>{userRegi}</label>
+            <label className="col-form-label fw-bold" style={{ fontSize: '1.1em' }}>{userRegi }</label>
         </div>
     )}
 
@@ -62,6 +62,7 @@ function Register() {
                     className="form-control"
                     name="avatar"
                     onChange={handleChange}
+                    required
                 />
             </div>
         </div>
@@ -73,6 +74,7 @@ function Register() {
                     className="form-control"
                     name="userName"
                     onChange={handleChange}
+                    required
                 />
             </div>
         </div>
@@ -84,6 +86,7 @@ function Register() {
                     className="form-control"
                     name="email"
                     onChange={handleChange}
+                    required
                 />
             </div>
         </div>
@@ -95,6 +98,7 @@ function Register() {
                     className="form-control"
                     name="password"
                     onChange={handleChange}
+                    required
                 />
             </div>
         </div>

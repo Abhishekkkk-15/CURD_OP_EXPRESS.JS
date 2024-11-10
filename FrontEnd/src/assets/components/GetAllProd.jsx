@@ -31,6 +31,9 @@ function GetAllProd() {
     })();
   }, [del]);
 
+  console.log(userInfo);
+  
+
   useEffect(()=>{
     (async()=>{
       try {
@@ -38,7 +41,6 @@ function GetAllProd() {
        dispatch(setUserInfo(data?.userInfo))
       } catch (error) {
         console.log("error",error)
-  
       }
     })();
   },[])
@@ -92,13 +94,13 @@ function GetAllProd() {
               <img
                 src={prod.thumbnail || "https://via.placeholder.com/300"}
                 className="card-img-top"
-                alt={prod.title}
+                alt={prod.title || "Product title"}
                 style={{ height: '250px', objectFit: 'cover', cursor: 'pointer' }}
                 onClick={() => showProduct(prod)} // Open Quick View on image click
               />
               <div className="card-body d-flex flex-column">
-                <h5 className="card-title text-truncate">{prod.title}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Price: &#x20b9;{prod.price}</h6>
+                <h5 className="card-title text-truncate">{prod.title || "Product title"}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">Price: &#x20b9;{prod.price || "Product Price"}</h6>
                 <p className="card-text text-truncate">{prod.description}</p>
               </div>
               <div className="card-footer bg-white d-flex justify-content-between align-items-center">

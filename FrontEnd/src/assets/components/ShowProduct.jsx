@@ -16,7 +16,7 @@ const ShowProduct = () => {
               <img
                 src={productDetails.thumbnail || "https://via.placeholder.com/1200x1200"}
                 className="img-fluid product-image"
-                alt={productDetails.title}
+                alt={productDetails.title || "Product title"}
                 style={{ objectFit: 'contain' }}
               />
             </div>
@@ -24,8 +24,8 @@ const ShowProduct = () => {
 
 
           <div className="col-md-6 mt-4 mt-md-0 ps-md-5">
-            <h1 className="text-dark">{productDetails.title}</h1>
-            <h3 className="text-muted">Price: &#x20b9;{productDetails.price}</h3>
+            <h1 className="text-dark">{productDetails.title || "Product title"}</h1>
+            <h3 className="text-muted">Price: &#x20b9;{productDetails.price || "Product price"}</h3>
 
 
             <div className="d-flex align-items-center my-3">
@@ -34,7 +34,7 @@ const ShowProduct = () => {
             </div>
 
 
-            <p className="lead">{productDetails.description}</p>
+            <p className="lead">{productDetails.description || "Product descripition"}</p>
 
 
             <div className="d-flex flex-column gap-3">

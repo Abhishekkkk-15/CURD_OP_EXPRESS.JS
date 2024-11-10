@@ -194,18 +194,22 @@ const loginuser = async (req, res) => {
 
 }
 
-const logOut = (req,res) =>{
-
+const logOut = (req, res) => {
     try {
-        
-        return res.status(200)
-        .clearCookie("accessToken")
-        .json({message:"User loged out"})
+        // Clear the cookie named "accessToken"
+        res.clearCookie("accessToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Only use secure cookies in production
+            sameSite: 'None', // Needed for cross-site cookies
+        });
+
+        // Send a response indicating the user is logged out
+        return res.status(200).json({ message: "User logged out" });
     } catch (error) {
-        console.log(error)
+        console.error("Error logging out:", error);
+        res.status(500).json({ message: "Error logging out" });
     }
-  
-}
+};
 
 const getUserInfo = (req, res) => {
     // const token = req.cookies.accessToken;

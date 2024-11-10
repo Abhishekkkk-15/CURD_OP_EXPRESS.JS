@@ -39,7 +39,7 @@ const userInfo = useSelector(state=> state.login.userInfo)
     formData.append('thumbnail', thumbnail);
 
     try {
-      const {data} = await axios.post("http://localhost:8000/CURD/", formData,{
+      const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/", formData,{
         withCredentials: true, headers: { "Content-Type": "multipart/form-data" }
       });
       setError(false);

@@ -20,7 +20,7 @@ function GetAllProd() {
     (async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:8000/CURD",{withCredentials: true});
+        const response = await axios.get("https://funecommerceserver.onrender.com/CURD",{withCredentials: true});
         setProduct(response.data);
         setLoading(false);
         setError(false);
@@ -34,7 +34,7 @@ function GetAllProd() {
   useEffect(()=>{
     (async()=>{
       try {
-       const {data} = await axios.post("http://localhost:8000/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
+       const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
        dispatch(setUserInfo(data?.userInfo))
       } catch (error) {
         console.log("error",error)
@@ -46,7 +46,7 @@ function GetAllProd() {
   const deleteprod = async(id) => {
     setDelete(!del);
     try {
-      await axios.delete(`http://localhost:8000/CURD/${id}`,{},{withCredentials:true});
+      await axios.delete(`https://funecommerceserver.onrender.com/CURD/${id}`,{},{withCredentials:true});
     } catch (error) {
       console.log("Error while deleting product", error);
       setError(true);

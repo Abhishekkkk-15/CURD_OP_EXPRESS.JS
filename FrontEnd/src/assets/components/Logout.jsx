@@ -11,7 +11,7 @@ function Logout() {
     const dispatch = useDispatch();
     const handleLogout = async () =>{
      try {
-        await axios.post("http://localhost:8000/CURD/logOut",{},{withCredentials:true}) 
+        await axios.post("https://funecommerceserver.onrender.com/CURD/logOut",{},{withCredentials:true}) 
            dispatch(setUserInfo(null))
      } catch (error) {
         console.log(error)

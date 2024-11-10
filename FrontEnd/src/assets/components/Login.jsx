@@ -23,12 +23,12 @@ function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-    //   const { data } = await axios.post("https://funecommerceserver.onrender.com/CURD/login", login,{
-    //     withCredentials: true // This is crucial for cookie handling
-    // });
-      const { data } = await axios.post("http://localhost:8000/CURD/login", login,{
+      const { data } = await axios.post("https://funecommerceserver.onrender.com/CURD/login", login,{
         withCredentials: true // This is crucial for cookie handling
     });
+    //   const { data } = await axios.post("http://localhost:8000/CURD/login", login,{
+    //     withCredentials: true // This is crucial for cookie handling
+    // });
 
       if (data?.error) {
         setLoginStatus(data?.error);

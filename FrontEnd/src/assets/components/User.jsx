@@ -12,7 +12,7 @@ const userInfo = useSelector(state => state.login.userInfo);
 useEffect(()=>{
   (async()=>{
     try {
-     const {data} = await axios.post("http://localhost:8000/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
+     const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
      dispatch(setUserInfo(data?.userInfo))
     } catch (error) {
       console.log("error",error)

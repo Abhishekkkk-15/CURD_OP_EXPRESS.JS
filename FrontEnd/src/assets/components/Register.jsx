@@ -27,12 +27,12 @@ function Register() {
 
         try {
             // Vercel Rotue
-            // const response = await axios.post("https://funecommerceserver.onrender.com/CURD/reg", formData, {
-            //     headers: { "Content-Type": "multipart/form-data" } /
-            // });
-            const response = await axios.post("http://localhost:8000/CURD/reg", formData, {
-                headers: { "Content-Type": "multipart/form-data" }  
+            const response = await axios.post("https://funecommerceserver.onrender.com/CURD/reg", formData, {
+                headers: { "Content-Type": "multipart/form-data" } 
             });
+            // const response = await axios.post("http://localhost:8000/CURD/reg", formData, {
+            //     headers: { "Content-Type": "multipart/form-data" }  
+            // });
             setuserRegi(response?.data);
             if(response?.data == "User Regitred"){
             setTimeout(()=>{

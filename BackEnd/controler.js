@@ -181,7 +181,7 @@ const loginuser = async (req, res) => {
             httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
             secure: process.env.NODE_ENV === 'production',
             maxAge: 3600000,
-            sameSite: 'Lax',
+            sameSite: 'None',
         }).json(
             {
                 accessToken,

@@ -1,0 +1,155 @@
+/* Navbar Container */
+.navbar {
+    background-color: #343a40;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .navbar-brand {
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .navbar-toggler {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: none;
+  }
+  
+  .navbar-toggler-icon {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    display: block;
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    margin: 0;
+  }
+  
+  .nav-item {
+    position: relative;
+  }
+  
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+  }
+  
+  .nav-link:hover {
+    color: #28a745;
+  }
+  
+  .cart-button {
+    display: inline-block;
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .cart-button svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .profile {
+    margin-left: 20px;
+  }
+  
+  .avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid white;
+    object-fit: cover;
+  }
+  
+  .login-btn {
+    background-color: transparent;
+    border: 1px solid #28a745;
+    color: white;
+    padding: 8px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  .login-btn:hover {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px;
+    }
+  
+    .navbar-toggler {
+      display: block;
+    }
+  
+    .navbar-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #343a40;
+      width: 100%;
+      text-align: center;
+    }
+  
+    .navbar-nav {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .navbar-links.active {
+      display: flex;
+    }
+  
+    .navbar-nav .nav-item {
+      width: 100%;
+    }
+  
+    .navbar-nav .nav-link {
+      padding: 10px;
+      width: 100%;
+    }
+  
+    .cart-button {
+      margin-left: 0;
+    }
+  
+    .profile {
+      margin-left: 0;
+    }
+  
+    .login-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+  }
+  

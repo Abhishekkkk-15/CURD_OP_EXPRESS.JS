@@ -1,11 +1,6 @@
 import mongoose from 'mongoose';
 
 const productsSchema = new mongoose.Schema({
-    id: {
-        type: Number,
-        required: true,
-        unique: true
-    },
     title: {
         type: String,
         required: true,
@@ -26,6 +21,9 @@ const productsSchema = new mongoose.Schema({
         trim: true
     },
     thumbnail:{
+        type:String
+    },
+    sellerName:{
         type:String
     }
 }, { timestamps: true });
@@ -57,6 +55,10 @@ const userSchema = new mongoose.Schema({
     writePermission: {
         type: Boolean, 
         default: false 
+    },
+    isAdmin:{
+        type:Boolean,
+        default:false
     },
     userCart:[String]
 }, { timestamps: true });

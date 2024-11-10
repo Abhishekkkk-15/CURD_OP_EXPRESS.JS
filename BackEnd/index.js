@@ -9,8 +9,6 @@ config();
 
 const  app = express()
 
-
-
 app.use(cors({
      origin: ['https://funecommerce.vercel.app','http://localhost:5173'], // Adjust this to your frontend URL
      credentials: true // Allow credentials (cookies)

@@ -14,7 +14,6 @@ const getProducts = async (req, res) => {
         return res.json({ message: "Data Not Available" })
     }
     return res.json(prod)
-
 }
 
 const getProduct = async (req, res) => {
@@ -32,9 +31,7 @@ const getProduct = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-    console.log("Req.file : ", req.file);
     const thumbnaillocalPath = req.file?.path
-    console.log("localPathThum", thumbnaillocalPath);
 
 
     if (!thumbnaillocalPath) {
@@ -43,17 +40,16 @@ const createProduct = async (req, res) => {
 
     try {
         const thumbnail = await uploadOnCloudinary(thumbnaillocalPath)
-        console.log(thumbnail);
         await Products.create({
-            id: req.body.id,
+            sellerName: req.body.sellerName,
             title: req.body.title,
             description: req.body.description,
             price: req.body.price,
             category: req.body.category,
-            thumbnail
+            thumbnail,
+            sallerName: req.sellerName
         })
-        console.log("Creted");
-        
+
         res.status(200).send("Product Created")
     } catch (error) {
         res.send(`Error : ${error.message}`)
@@ -88,8 +84,6 @@ const replaceProduct = async (req, res) => {
         res.status(200).send("Product Replaced")
     } catch (error) {
         return res.status(500).send(`Server Error ${error.message}`)
-
-
     }
 }
 
@@ -103,9 +97,6 @@ const registerUser = async (req, res) => {
     const existedUser = await User.findOne({
         $or: [{ userName }, { email }]    // $or is mongodb query which check if even one condition is true
     })
-
-    console.log(req.file);
-
 
     if (existedUser) {
         return res.status(200).send("User and Email Already Exists!!")
@@ -137,8 +128,9 @@ const loginuser = async (req, res) => {
     const userInfo = {
         username: user?.userName,
         email: user?.email,
-        writePermission: user?.writePermission ? "Admin" : "User",
-        avatar: user?.avatar
+        writePermission: user?.writePermission,
+        avatar: user?.avatar,
+        isAdmin: user?.isAdmin
     }
 
     if (!user) {
@@ -158,24 +150,37 @@ const loginuser = async (req, res) => {
     }
 
     const accessToken = jwt.sign(
-        { userId: user._id, email: user.email },
+        {
+            userName:user.userName,
+            userId: user._id,
+            email: user.email,
+            writePermission: user.writePermission,
+            isAdmin: user.isAdmin,
+            avatar: user.avatar,
+        },
         process.env.JWT_SECRET,
-        { expiresIn: "2m" }
+        { expiresIn: "1h" }
     )
 
     const refreshToken = jwt.sign(
-        { userId: user._id, email: user.email },
+        {
+            userName:user.userName,
+            userId: user._id,
+            email: user.email,
+            writePermission: user.writePermission,
+            isAdmin: user.isAdmin,
+            avatar: user.avatar,
+        }, 
         process.env.JWT_REFRESH_SECRET,
         { expiresIn: "7d" }
     )
 
-
     if (user.email && user.password === req.body.password) {
-        return res.status(200).cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: true,
-            // maxAge: 7*24*60*60*1000,
-            // sameSite:'strict'
+        return res.status(200).cookie('accessToken', accessToken, {
+            httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 3600000,
+            sameSite: 'Lax',
         }).json(
             {
                 accessToken,
@@ -185,6 +190,30 @@ const loginuser = async (req, res) => {
 
             })
     }
+
+}
+
+const logOut = (req,res) =>{
+
+    try {
+        
+        return res.status(200)
+        .clearCookie("accessToken")
+        .json({message:"User loged out"})
+    } catch (error) {
+        console.log(error)
+    }
+  
+}
+
+const getUserInfo = (req, res) => {
+    // const token = req.cookies.accessToken;
+    // if(!token) return;
+    const userInfo = req.user;
+    if (!userInfo) return null;
+    res.status(200).json({
+        userInfo
+    })
 }
 
 const addToCart = async (req, res) => {
@@ -210,5 +239,7 @@ export {
     deleteProduct,
     registerUser,
     loginuser,
-    addToCart
+    addToCart,
+    getUserInfo,
+    logOut
 }

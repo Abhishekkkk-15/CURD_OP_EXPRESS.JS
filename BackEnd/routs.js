@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { createProduct, deleteProduct, getProduct,loginuser, getProducts, replaceProduct,registerUser, updateProduct,addToCart } from "./controler.js";
-import { verifyAccessToken } from "./middleware.js";
+import { createProduct, deleteProduct, getProduct,loginuser, getProducts, replaceProduct,registerUser, updateProduct,addToCart ,getUserInfo, logOut} from "./controler.js";
+import { authenticateToken, checkAdmin, addProductPermission } from "./middleware.js";
 import { upload } from "./middleware.js";
 
 const router = Router();
@@ -9,12 +9,17 @@ const router = Router();
 //Routes For  
 router.route("/").get(getProducts)
 router.route("/:id").get(getProduct)
-router.route("/").post(upload.single("thumbnail"),createProduct)
-router.route("/:id").patch(updateProduct)
-router.route("/:id").put(replaceProduct)
-router.route("/:id").delete(deleteProduct)
+router.route("/").post(authenticateToken,addProductPermission,upload.single("thumbnail"),createProduct)
+router.route("/:id").patch(checkAdmin,updateProduct)
+router.route("/:id").put(checkAdmin,replaceProduct)
+router.route("/:id").delete(checkAdmin,deleteProduct)
 router.route("/reg").post(upload.single("avatar"),registerUser)
 router.route("/login").post(loginuser)
-router.route("/addToCart").post(addToCart)
-
+router.route("/logOut").post(logOut)
+router.route("/addToCart").post(authenticateToken,addToCart)
+router.route("/userInfo").post(authenticateToken,getUserInfo)
+router.route("/admin-route").post(authenticateToken,addProductPermission,(req,res)=>{
+    res.send("This is an admin-only route.")
+})
+    
 export default router

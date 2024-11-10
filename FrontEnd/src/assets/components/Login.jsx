@@ -9,13 +9,9 @@ function Login() {
   const dispatch = useDispatch();
   const [login, setLogin] = useState({});
   const [loginStatus, setLoginStatus] = useState('');
-  const [writePermission, setWritePermission] = useState(false);
-  const [logout, setLogout] = useState(false);
 
-  const loginSt = useSelector((state) => state.login.loginSt);
-  const logOrNot = useSelector((state) => state.login.logOrNot);
-  const navigate = useNavigate();
-
+  const userInfo = useSelector((state) => state.login.userInfo);
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLogin((prevLogin) => ({
@@ -27,7 +23,10 @@ function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post("https://funecommerceserver.onrender.com/CURD/login", login,{
+    //   const { data } = await axios.post("https://funecommerceserver.onrender.com/CURD/login", login,{
+    //     withCredentials: true // This is crucial for cookie handling
+    // });
+      const { data } = await axios.post("http://localhost:8000/CURD/login", login,{
         withCredentials: true // This is crucial for cookie handling
     });
 
@@ -35,25 +34,25 @@ function Login() {
         setLoginStatus(data?.error);
         return;
       }
-
-      setWritePermission(data.writePermission);
-      setLogout(true);
-      
-      dispatch(setLogOrNot(true))
       dispatch(setUserInfo(data.userInfo));
-      dispatch(setUserStatus(data.writePermission));
-
-      console.log('Login Status:', data);
-    } catch (error) {
+    } catch (error) { 
       console.error("An error occurred during login:", error);
     }
   };
 
-  const handleLogout = () => {
-    navigate('/login');
-  };
+// this to access cookies in frontEnd when httponly is false
 
-  if(logOrNot) {
+//   function getCookie(name) {
+//     const value = `; ${document.cookie}`;
+//     const parts = value.split(`; ${name}=`);
+//     if (parts.length === 2) return parts.pop().split(';').shift();
+// }
+
+// // Try fetching the accessToken specifically
+// const accessToken = getCookie('accessToken');
+// console.log('Access Token:', accessToken);
+
+  if(userInfo) {
     return <UserInfo />;
   }
 

@@ -47,7 +47,7 @@ const ShowProduct = () => {
 
             <div className="mt-4">
               <h5 className="text-muted">Seller Info</h5>
-              <p className="text-muted">Sold by: <strong>AJIO Seller</strong></p>
+              <p className="text-muted">Sold by: <strong>{productDetails.sellerName || "AJIO SELLER"}</strong></p>
               <p className="text-muted">Ships from: <strong>AJIO</strong></p>
             </div>
           </div>

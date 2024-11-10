@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
-const db = "mongodb+srv://mrabhi748:abhi2193@pratice.sokpe.mongodb.net/?retryWrites=true&w=majority&appName=pratice";
+import { config } from 'dotenv';
+config();
+const db = process.env.DB_URL
 const connectDB = async () =>{
     try {
         const connectionInstance =  await mongoose.connect(db)

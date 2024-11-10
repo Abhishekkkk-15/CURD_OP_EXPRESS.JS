@@ -1,10 +1,24 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserInfo } from '../../app/Slices/loginSlice';
 import Logout from './Logout';
+import axios from 'axios';
 
 function UserInfo() {
-  const userinfo = useSelector(state => state.login.userInfo);
-  console.log("User Information:", userinfo);
+
+const dispatch = useDispatch()
+const userInfo = useSelector(state => state.login.userInfo);
+useEffect(()=>{
+  (async()=>{
+    try {
+     const {data} = await axios.post("http://localhost:8000/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
+     dispatch(setUserInfo(data?.userInfo))
+    } catch (error) {
+      console.log("error",error)
+    }
+  })();
+},[])
 
   return (
     <>
@@ -13,9 +27,9 @@ function UserInfo() {
         <div className="card-body text-center">
         
           <div className="avatar-container mb-4">
-            {userinfo?.avatar ? (
+            {userInfo?.avatar ? (
               <img 
-                src={userinfo.avatar} 
+                src={userInfo.avatar} 
                 alt="Avatar" 
                 className="rounded-circle" 
                 style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
@@ -34,10 +48,10 @@ function UserInfo() {
           </div>
 
          
-          <h5 className="card-title mb-3">{userinfo?.username}</h5>
+          <h5 className="card-title mb-3">{userInfo?.userName}</h5>
           <div className="info-container mb-3">
-            <p className="card-text text-muted">Email: <span className="text-dark">{userinfo?.email}</span></p>
-            <p className="card-text text-muted">Role: <span className="text-dark">{userinfo?.writePermission ? 'Admin' : 'User'}</span></p>
+            <p className="card-text text-muted">Email: <span className="text-dark">{userInfo?.email}</span></p>
+            <p className="card-text text-muted">Member: <span className="text-dark">{userInfo?.writePermission ? 'Premium ' : 'Non-Premium '}</span></p>
           </div>
         </div>
 

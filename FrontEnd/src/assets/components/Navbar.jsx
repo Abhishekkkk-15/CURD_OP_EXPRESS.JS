@@ -8,7 +8,7 @@ function Navbar() {
   const userInfo = useSelector((state) => state.login.userInfo);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
        
         <Link className="navbar-brand" to="/">
@@ -60,7 +60,7 @@ function Navbar() {
           </Link>
 
          
-          {logOrNot ? (
+          {userInfo ? (
             <div className="d-flex align-items-center ms-3">
               <Link to="/userInfo" className="text-white ms-2">
                 <img
@@ -81,6 +81,7 @@ function Navbar() {
         </div>
       </div>
     </nav>
+  
   );
 }
 

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 function AddProd() {
+const userInfo = useSelector(state=> state.login.userInfo)
   const [product, setProduct] = useState({
-    id: '',
+    sellerName: '',
     title: '',
     price: '',
     category: '',
@@ -12,7 +13,7 @@ function AddProd() {
   });
   const [thumbnail, setThumbnail] = useState(null);
   const [error, setError] = useState(false);
-  const loginSt = useSelector(state => state.login.loginSt);
+  const [checkAdmin, setAdmin] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +31,7 @@ function AddProd() {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('id', product.id);
+    formData.append('id', product.sellerName);
     formData.append('title', product.title);
     formData.append('price', product.price);
     formData.append('category', product.category);
@@ -38,8 +39,8 @@ function AddProd() {
     formData.append('thumbnail', thumbnail);
 
     try {
-      await axios.post("https://funecommerceserver.onrender.com/CURD", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
+      const {data} = await axios.post("http://localhost:8000/CURD/", formData,{
+        withCredentials: true, headers: { "Content-Type": "multipart/form-data" }
       });
       setError(false);
       alert("Product Added Successfully!!")
@@ -49,7 +50,19 @@ function AddProd() {
     }
   };
 
-  if (!loginSt) {
+useEffect(()=>{
+  (async()=>{
+    try {
+      await axios.post("http://localhost:8000/CURD/admin-route",{},{withCredentials: true}); //this helps to send cookies to backend server
+      setAdmin(true)
+    } catch (error) {
+      setAdmin(false)
+      console.log("error",error)
+    }
+  })();
+},[])
+
+if (!checkAdmin) {
     return <h1 className='text-center mt-5'>You are not authorized to Add Products</h1>;
   }
 
@@ -75,10 +88,10 @@ function AddProd() {
               className='form-control'
               placeholder='Enter Id'
               type='text'
-              name='id'
-              value={product.id}
+              name='sellerName'
+              value={userInfo.userName}
               onChange={handleChange}
-              required
+              readOnly
             />
           </div>
 

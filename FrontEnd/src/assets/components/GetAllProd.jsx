@@ -1,13 +1,13 @@
-// GetAllProd.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { setUserInfo } from '../../app/Slices/loginSlice';
 import { setProductt } from '../../app/Slices/productSlice';
 import QuickView from './QuickView'; 
 
 function GetAllProd() {
-  const loginSt = useSelector(state => state.login.loginSt);
+  const userInfo = useSelector(state => state.login.userInfo)  || false ;
   const [product, setProduct] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,11 +17,10 @@ function GetAllProd() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    
     (async () => {
       try {
         setLoading(true);
-        const response = await axios.get("https://funecommerceserver.onrender.com/CURD");
+        const response = await axios.get("http://localhost:8000/CURD",{withCredentials: true});
         setProduct(response.data);
         setLoading(false);
         setError(false);
@@ -32,10 +31,22 @@ function GetAllProd() {
     })();
   }, [del]);
 
+  useEffect(()=>{
+    (async()=>{
+      try {
+       const {data} = await axios.post("http://localhost:8000/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
+       dispatch(setUserInfo(data?.userInfo))
+      } catch (error) {
+        console.log("error",error)
+  
+      }
+    })();
+  },[])
+
   const deleteprod = async(id) => {
     setDelete(!del);
     try {
-      await axios.delete(`http://localhost:8000/CURD/${id}`);
+      await axios.delete(`http://localhost:8000/CURD/${id}`,{},{withCredentials:true});
     } catch (error) {
       console.log("Error while deleting product", error);
       setError(true);
@@ -56,7 +67,7 @@ function GetAllProd() {
   };
 
   const addToCart = (id) => {
-    console.log("add To cart", id);
+    console.log("add To cart");
   };
 
   if (loading) {
@@ -94,11 +105,10 @@ function GetAllProd() {
                 <Link to="/showProduct">
                   <button className="btn btn-outline-primary btn-sm" onClick={()=>setprod(index)}>More Details</button>
                 </Link>
-                {loginSt ? (
+                {userInfo?.isAdmin || false? (
                   <button
                     className="btn btn-outline-danger btn-sm"
                     onClick={() => deleteprod(prod._id)}
-                    disabled={!loginSt}
                   >
                     Delete
                   </button>

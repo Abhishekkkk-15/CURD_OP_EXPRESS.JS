@@ -96,7 +96,7 @@ if(userInfo.writePermission){
               placeholder='Enter Id'
               type='text'
               name='sellerName'
-              value={userInfo.userName || "User Name"}
+              value={userInfo.userName}
               onChange={handleChange}
               readOnly
             />
@@ -108,7 +108,7 @@ if(userInfo.writePermission){
               placeholder='Enter Title'
               type='text'
               name='title'
-              value={product.title || "Product title"}
+              value={product.title}
               onChange={handleChange}
               required
             />
@@ -120,7 +120,7 @@ if(userInfo.writePermission){
               placeholder='Enter Price'
               type='text'
               name='price'
-              value={product.price || "Product Price"}
+              value={product.price}
               onChange={handleChange}
               required
             />
@@ -132,7 +132,7 @@ if(userInfo.writePermission){
               placeholder='Enter Category'
               type='text'
               name='category'
-              value={product.category || "Product Price"}
+              value={product.category}
               onChange={handleChange}
               required
             />
@@ -143,7 +143,7 @@ if(userInfo.writePermission){
               className='form-control'
               placeholder='Enter Description'
               name='description'
-              value={product.description || "Product Price"}
+              value={product.description}
               onChange={handleChange}
               required
             ></textarea>

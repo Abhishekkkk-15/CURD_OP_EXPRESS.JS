@@ -11,33 +11,39 @@ const productsSchema = new mongoose.Schema({
         trim: true
     },
     price: {
-        type: Number,   
+        type: Number,
         required: true,
-        min: 0   
+        set: (value) => {
+            // Remove commas from the input and convert it to a number
+            const cleanedValue = value.replace(/,/g, '');
+            return parseFloat(cleanedValue); // Ensure it's a valid number
+        }
     },
     category: {
         type: String,
         required: true,
         trim: true
     },
-    thumbnail:{
-        type:String
+    thumbnail: {
+        type: String
     },
-    sellerName:{
-        type:String
+    sellerName: {
+        type: String,
+        required: true,
+        trim: true
     }
 }, { timestamps: true });
 
 const userSchema = new mongoose.Schema({
-    avatar:{
-        type:String
+    avatar: {
+        type: String
     },
     userName: {
         type: String,
         required: true,
         unique: true,
         trim: true,
-        minlength: 3 
+        minlength: 3
     },
     email: {
         type: String,
@@ -50,18 +56,18 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 8 
+        minlength: 8
     },
     writePermission: {
-        type: Boolean, 
-        default: false 
+        type: Boolean,
+        default: false
     },
-    isAdmin:{
-        type:Boolean,
-        default:false
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
-    userCart:[String]
+    userCart: [String]
 }, { timestamps: true });
 
-export const Products = mongoose.model('Products',productsSchema);
-export const User = mongoose.model('User',userSchema)
+export const Products = mongoose.model('Products', productsSchema);
+export const User = mongoose.model('User', userSchema)

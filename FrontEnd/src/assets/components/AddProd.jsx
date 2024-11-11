@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 function AddProd() {
 const userInfo = useSelector(state=> state.login.userInfo)
   const [product, setProduct] = useState({
-    sellerName: '',
     title: '',
     price: '',
     category: '',
@@ -33,7 +32,6 @@ const userInfo = useSelector(state=> state.login.userInfo)
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('id', product.sellerName);
     formData.append('title', product.title);
     formData.append('price', product.price);
     formData.append('category', product.category);
@@ -44,6 +42,10 @@ const userInfo = useSelector(state=> state.login.userInfo)
       const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/", formData,{
         withCredentials: true, headers: { "Content-Type": "multipart/form-data" }
       });
+      // const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/", formData,{
+      //   withCredentials: true, headers: { "Content-Type": "multipart/form-data" }
+      // });
+      
       setError(false);
       alert("Product Added Successfully!!")
     } catch (err) {
@@ -67,9 +69,8 @@ useEffect(()=>{
 if (!checkAdmin) {
   return <h1 className='text-center mt-5'>You are not authorized to Add Products send Admin request <Link to="/requestAdmin">Admin</Link></h1>;
   }
-console.log(userInfo.writePermission)
 
-if(userInfo.writePermission){
+if(userInfo?.writePermission){
   <RequestAdmin userInfo={userInfo}/>
 }  
 
@@ -97,7 +98,6 @@ if(userInfo.writePermission){
               type='text'
               name='sellerName'
               value={userInfo.userName}
-              onChange={handleChange}
               readOnly
             />
           </div>

@@ -23,7 +23,6 @@ connectDB()
      console.log("MongoDB connection Failed !!!",error)
 })
 
-
 // Routes 
 app.use("/CURD",userRouter)
 

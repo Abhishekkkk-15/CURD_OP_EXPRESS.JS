@@ -8,7 +8,7 @@ import axios from 'axios';
 function UserInfo() {
 
 const dispatch = useDispatch()
-const userInfo = useSelector(state => state.login.userInfo);
+const userInfo = useSelector(state => state.login.userInfo);  
 useEffect(()=>{
   (async()=>{
     try {

@@ -34,23 +34,21 @@ const getProduct = async (req, res) => {
 const createProduct = async (req, res) => {
     const thumbnaillocalPath = req.file?.path
 
-
     if (!thumbnaillocalPath) {
         return res.status(200).send("Thumbnail is required!")
     }
-
+    console.log(req.user.userName)
     try {
+        console.log(req.body.title,req.body.description,req.body.price,req.body.category)
         const thumbnail = await uploadOnCloudinary(thumbnaillocalPath)
         await Products.create({
-            sellerName: req.body.sellerName,
+            sellerName: req.user.userName,
             title: req.body.title,
             description: req.body.description,
             price: req.body.price,
             category: req.body.category,
             thumbnail,
-            sallerName: req.sellerName
         })
-
         res.status(200).send("Product Created")
     } catch (error) {
         res.send(`Error : ${error.message}`)
@@ -89,9 +87,28 @@ const replaceProduct = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
-    await Products.findByIdAndDelete(req.params.id)
-    res.status(200).send("Product Deleted")
-}
+    const productID = req.params.id;
+
+    if (!productID) {
+        return res.status(400).send("Product not found or invalid Product ID provided");
+    }
+
+    try {
+        const findProd = await Products.findById(productID);
+
+        if (!findProd) {
+            return res.status(404).send("Product not found with this ID");
+        }
+
+        await Products.findByIdAndDelete(productID);
+
+        return res.status(200).send("Product Deleted");
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        return res.status(500).send("An error occurred while deleting the product");
+    }
+};
+
 
 const registerUser = async (req, res) => {
     const { email, password, userName } = req.body;
@@ -179,16 +196,16 @@ const loginuser = async (req, res) => {
     if (user.email && user.password === req.body.password) {
         return res.status(200).cookie('accessToken', accessToken, {
             httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
-            secure: process.env.NODE_ENV === 'production',
+            secure: process.env.NODE_ENV === 'production', //The secure flag ensures that the cookie is only sent over HTTPS connections.
             maxAge: 3600000,
-            sameSite: 'None',
+            sameSite: 'None', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
+            // (None) this is for deployment (https) requests
         }).json(
             {
                 accessToken,
                 userInfo,
                 message: "User loged in",
                 writePermission: user?.writePermission
-
             })
     }
 
@@ -203,7 +220,7 @@ const logOut = (req, res) => {
             sameSite: 'None', // Needed for cross-site cookies
         });
 
-        // Send a response indicating the user is logged out
+        // Send a response indicating the user is logged out    
         return res.status(200).json({ message: "User logged out" });
     } catch (error) {
         console.error("Error logging out:", error);
@@ -212,8 +229,6 @@ const logOut = (req, res) => {
 };
 
 const getUserInfo = (req, res) => {
-    // const token = req.cookies.accessToken;
-    // if(!token) return;
     const userInfo = req.user;
     if (!userInfo) return null;
     res.status(200).json({
@@ -240,6 +255,7 @@ const sendMailForProductAddPermission = async (req,res) =>{
     const {userName, email} = req.user;
     console.log(userName,email)
     const message = req.body.message;
+    console.log(message)
     let transporter = nodemailer.createTransport({
         service:"Gmail", 
         auth:{

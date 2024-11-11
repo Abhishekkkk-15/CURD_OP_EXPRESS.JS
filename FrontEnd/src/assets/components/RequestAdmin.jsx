@@ -15,7 +15,7 @@ function RequestAdmin() {
     useEffect(()=>{
         (async()=>{
           try {
-           const {data} = await axios.post("http://localhost:8000/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
+           const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
            dispatch(setUserInfo(data?.userInfo))
           } catch (error) {
             console.log("error",error)
@@ -25,13 +25,12 @@ function RequestAdmin() {
 
     const userInfo = useSelector((state) => state.login.userInfo) || false;
 
-
     const sendingMail = async (e) => {
         e.preventDefault();  // Prevent the form from refreshing the page
         try {
-            await axios.post("https://funecommerceserver.onrender.com/CURD/request-admin", message, { withCredentials: true });
-            alert("Mail Sent");
-            // setMessage(' ')
+            //In axios we can have first url second is data {must be object}, third is cookies and header sending options
+            await axios.post("https://funecommerceserver.onrender.com/CURD/request-admin", {message} , { withCredentials: true });
+            alert("Mail Sent"); 
             console.log(message)
             setSent(true)
         } catch (error) {

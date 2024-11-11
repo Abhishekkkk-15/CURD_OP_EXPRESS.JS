@@ -64,12 +64,31 @@ const storage = multer.diskStorage({
 
 // File filter to restrict to images only
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true); // Allow file
+  const allowedTypes = [
+    'image/jpeg', 
+    'image/pjpeg', 
+    'image/png', 
+    'image/gif', 
+    'image/webp', 
+    'image/bmp', 
+    'image/tiff', 
+    'image/jfif'
+  ];
+  
+  // Check mimetype
+  const isMimeTypeAllowed = allowedTypes.includes(file.mimetype);
+
+  // Check file extension as a backup
+  const ext = path.extname(file.originalname).toLowerCase();
+  const isExtensionAllowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.tiff', '.jfif'].includes(ext);
+
+  if (isMimeTypeAllowed || isExtensionAllowed) {
+    cb(null, true); // Allow the file
   } else {
-    cb(req.send("Only Images are allowed"), false); // Reject file
+    cb(new Error("Only images are allowed"), false); // Reject the file
   }
 };
+
 
 // Pass storage and fileFilter to multer
 const upload = multer({

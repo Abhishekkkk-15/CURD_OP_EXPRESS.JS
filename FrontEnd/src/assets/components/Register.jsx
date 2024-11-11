@@ -30,7 +30,7 @@ function Register() {
             const response = await axios.post("https://funecommerceserver.onrender.com/CURD/reg", formData, {
                 headers: { "Content-Type": "multipart/form-data" } 
             });
-            // const response = await axios.post("http://localhost:8000/CURD/reg", formData, {
+            // const response = await axios.post("http://localhost:9000/CURD/reg", formData, {
             //     headers: { "Content-Type": "multipart/form-data" }  
             // });
             setuserRegi(response?.data);

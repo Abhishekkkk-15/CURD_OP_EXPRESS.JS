@@ -24,15 +24,14 @@ function GetAllProd() {
         setProduct(response.data);
         setLoading(false);
         setError(false);
+  console.log("Product ID",product[1]?._id);
+
       } catch (error) {
         setError(true);
         console.error("Error fetching data:", error);
       }
     })();
   }, [del]);
-
-  console.log(userInfo);
-  
 
   useEffect(()=>{
     (async()=>{
@@ -46,9 +45,9 @@ function GetAllProd() {
   },[])
 
   const deleteprod = async(id) => {
-    setDelete(!del);
     try {
-      await axios.delete(`https://funecommerceserver.onrender.com/CURD/${id}`,{},{withCredentials:true});
+      await axios.delete(`https://funecommerceserver.onrender.com/CURD/${id}`,{withCredentials:true});
+    setDelete(!del);
     } catch (error) {
       console.log("Error while deleting product", error);
       setError(true);
@@ -82,7 +81,7 @@ function GetAllProd() {
 
   if (!Array.isArray(product) || product.length === 0) {
     return <h1 className="container text-center text-muted my-5">No Products Available</h1>;
-  }
+  }  
 
   return (
     <div className="container mt-4">

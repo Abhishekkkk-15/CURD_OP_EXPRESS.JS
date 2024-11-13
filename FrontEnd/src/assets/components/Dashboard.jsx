@@ -18,7 +18,7 @@ const Dashboard = () => {
                 setProductCount(response.data.productCount);
             } catch (error) {
                 console.log("Error fetching dashboard data:", error);
-                setMessage('Failed to load dashboard data.');
+                setMessage('You are not Authorized');
             }
         })();
     }, [update]);

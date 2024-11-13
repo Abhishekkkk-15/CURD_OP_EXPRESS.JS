@@ -57,11 +57,11 @@ function Navbar() {
                 Add Product
               </Link>
             </li>
-            <li className="nav-item">
+           {userInfo.isAdmin ? <li className="nav-item">
               <Link className="nav-link text-white" to="/dashboard">
                 DashBoard
               </Link>
-            </li>
+            </li> : ""}
           </ul>
 
          

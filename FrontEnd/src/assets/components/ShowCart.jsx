@@ -66,7 +66,7 @@ if(!logOrNot){
       )}
 
       <h2>Your Shopping Cart</h2>
-      {cartItems.length === 0 ? (
+      {cartItems?.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div className="row">
@@ -75,28 +75,28 @@ if(!logOrNot){
               <div className="card shadow-sm h-100">
                 <div className="d-flex align-items-center">
                   <img 
-                    src={item.productId.thumbnail || "thumbnail"} 
-                    alt={item.productId.title || "title"} 
+                    src={item?.productId.thumbnail || "thumbnail"} 
+                    alt={item?.productId.title || "title"} 
                     className="card-img-top img-fluid"
                     style={{ maxHeight: '150px', objectFit: 'cover', width: '100%' }} 
                   />
                 </div>
                 <div className="card-body">
-                  <h5 className="card-title" style={{ fontSize: '1rem' }}>{item.productId.title || "title"}</h5>
+                  <h5 className="card-title" style={{ fontSize: '1rem' }}>{item?.productId.title || "title"}</h5>
                   <p className="card-text text-muted" style={{ fontSize: '0.9rem' }}>
-                    {item.productId.description || "descripition"}
+                    {item?.productId.description || "descripition"}
                   </p>
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <div>
-                      <span>Quantity: {item.quantity || "1"}</span>
+                      <span>Quantity: {item?.quantity || "1"}</span>
                     </div>
                     <div>
-                      <strong>&#x20b9;{(item.productId.price * item.quantity).toFixed(2) || "0000"}</strong>
+                      <strong>&#x20b9;{(item?.productId.price * item?.quantity).toFixed(2) || "0000"}</strong>
                     </div>
                   </div>
                   <button 
                     className="btn btn-danger btn-sm w-100"
-                    onClick={() => handleRemoveItem(item.productId._id || " ")}
+                    onClick={() => handleRemoveItem(item?.productId._id)}
                   >
                     Remove
                   </button>

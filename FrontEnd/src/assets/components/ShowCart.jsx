@@ -96,7 +96,7 @@ if(!logOrNot){
                   </div>
                   <button 
                     className="btn btn-danger btn-sm w-100"
-                    onClick={() => handleRemoveItem(item.productId._id)}
+                    onClick={() => handleRemoveItem(item.productId._id || " ")}
                   >
                     Remove
                   </button>

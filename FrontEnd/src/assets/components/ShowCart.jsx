@@ -17,7 +17,7 @@ const ShowCart = () => {
           {},
           { withCredentials: true }
         );
-        setCartItems(response.data.products);
+        setCartItems(response?.data.products);
       } catch (error) {
         console.log("Error while fetching the cart data", error);
         setMessage('Failed to load cart items.');
@@ -44,7 +44,7 @@ const ShowCart = () => {
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
-      return total + item.productId.price * item.quantity;
+      return total + item?.productId.price * item.quantity;
     }, 0).toFixed(2); // Convert to string with two decimal places
   };
 
@@ -58,7 +58,7 @@ if(!logOrNot){
     <div className="container mt-4">
       {message && (
         <div 
-          className={`alert ${message.includes('Failed') ? 'alert-danger' : 'alert-success'}`}
+          className={`alert ${message?.includes('Failed') ? 'alert-danger' : 'alert-success'}`}
           role="alert"
         >
           {message}

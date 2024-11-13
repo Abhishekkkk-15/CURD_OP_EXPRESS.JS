@@ -23,17 +23,6 @@ const Dashboard = () => {
         })();
     }, [update]);
 
-    useEffect(()=>{
-        (async()=>{
-          try {
-           const {data} = await axios.post(`${import.meta.env.VITE_API_URL}CURD/userInfo`,{},{withCredentials: true}); //this helps to send cookies to backend server
-           setShow(data?.isAdmin)
-          } catch (error) {
-            console.log("error",error)
-          }
-        })();
-      },[])
-
     const togglePermission = async (userId) => {
         try {
             const response = await axios.post(
@@ -61,10 +50,6 @@ const Dashboard = () => {
         }
         setTimeout(() => setMessage(''), 2000); 
     };
-
-    if(!show){
-        return <h1 className='text-center mt-5'>You are unauthorized</h1>;
-    }
 
     return (
         <div style={{ padding: '20px', marginTop: '20px' }}>

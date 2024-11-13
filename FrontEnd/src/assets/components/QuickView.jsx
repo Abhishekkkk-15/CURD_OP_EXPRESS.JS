@@ -27,7 +27,7 @@ const QuickView = ({ product, closeModal, addToCart }) => {
                 />
               </div>
               <div className="col-md-6">
-                <h4>Price: ₹{product.price || "Product Price"}</h4>
+                <h4>Price: ₹{(product.price).toFixed(2) || "Product Price"}</h4>
                 <p>{product.description || "Product Descripition"}</p>
                 <div className="d-flex justify-content-between">
                   <Link to="/buy"><button className="btn btn-primary">Buy Now</button></Link>

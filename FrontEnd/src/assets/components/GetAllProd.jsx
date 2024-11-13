@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setUserInfo } from '../../app/Slices/loginSlice';
+import { setLogOrNot, setUserInfo } from '../../app/Slices/loginSlice';
 import { setProductt } from '../../app/Slices/productSlice';
 import QuickView from './QuickView'; 
 
@@ -20,12 +20,11 @@ function GetAllProd() {
     (async () => {
       try {
         setLoading(true);
-        const response = await axios.get("https://funecommerceserver.onrender.com/CURD",{withCredentials: true});
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}CURD`,{withCredentials: true});
         setProduct(response.data);
         setLoading(false);
         setError(false);
-  console.log("Product ID",product[1]?._id);
-
+        // console.log(product[1]._id)
       } catch (error) {
         setError(true);
         console.error("Error fetching data:", error);
@@ -36,8 +35,9 @@ function GetAllProd() {
   useEffect(()=>{
     (async()=>{
       try {
-       const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/userInfo",{},{withCredentials: true}); //this helps to send cookies to backend server
+       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}CURD/userInfo`,{},{withCredentials: true}); //this helps to send cookies to backend server
        dispatch(setUserInfo(data?.userInfo))
+       dispatch(setLogOrNot(true))
       } catch (error) {
         console.log("error",error)
       }
@@ -46,7 +46,7 @@ function GetAllProd() {
 
   const deleteprod = async(id) => {
     try {
-      await axios.delete(`https://funecommerceserver.onrender.com/CURD/${id}`,{withCredentials:true});
+      await axios.delete(`${import.meta.env.VITE_API_URL}CURD/${id}`,{withCredentials:true});
     setDelete(!del);
     } catch (error) {
       console.log("Error while deleting product", error);
@@ -67,8 +67,28 @@ function GetAllProd() {
     setShowModal(false); // Close Quick View modal
   };
 
-  const addToCart = (id) => {
-    console.log("add To cart");
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+
+  const addToCart = async (productId, quantity) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}CURD/addToCart`,
+        { productId, quantity },
+        { withCredentials: true }
+      );
+      setMessage('Item added to cart successfully!');
+      setMessageType('success'); // For success message
+      setTimeout(() => {
+        setMessage(''); // Hide the message after 2 seconds
+      }, 2000);
+    } catch (error) {
+      setMessage('Failed to add item to cart.');
+      setMessageType('error'); // For error message
+      setTimeout(() => {
+        setMessage(''); // Hide the message after 2 seconds
+      }, 2000);
+    }
   };
 
   if (loading) {
@@ -84,6 +104,8 @@ function GetAllProd() {
   }  
 
   return (
+    <>
+    <p className='mb-5 text-center text-truncate'>{message}</p>
     <div className="container mt-4">
       <h1 className="mb-5 text-center">Our Products</h1>
       <div className="row">
@@ -99,28 +121,25 @@ function GetAllProd() {
               />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-truncate">{prod.title || "Product title"}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Price: &#x20b9;{prod.price || "Product Price"}</h6>
+                <h6 className="card-subtitle mb-2 text-muted">Price: &#x20b9;{(prod.price).toFixed(2) || "Product Price"}</h6>
                 <p className="card-text text-truncate">{prod.description}</p>
               </div>
               <div className="card-footer bg-white d-flex justify-content-between align-items-center">
                 <Link to="/showProduct">
                   <button className="btn btn-outline-primary btn-sm" onClick={()=>setprod(index)}>More Details</button>
                 </Link>
-                {userInfo?.isAdmin || false? (
-                  <button
+                 {userInfo?.isAdmin ? <button
                     className="btn btn-outline-danger btn-sm"
-                    onClick={() => deleteprod(prod._id)}
+                    onClick={() => deleteprod(prod._id,1)}
                   >
                     Delete
-                  </button>
-                ) : (
+                  </button> :
                   <button
                     className="btn btn-outline-danger btn-sm"
-                    onClick={() => addToCart(prod._id)}
+                    onClick={() => addToCart(prod._id,1)}
                   >
                     Add to Cart
-                  </button>
-                )}
+                  </button>}
               </div>
             </div>
           </div>
@@ -136,6 +155,7 @@ function GetAllProd() {
         />
       )}
     </div>
+    </>
   );
 }
 

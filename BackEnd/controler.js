@@ -1,4 +1,4 @@
-import { Products, User } from "./schema.js";
+import { Cart, Products, User } from "./schema.js";
 import { config } from 'dotenv';
 import jwt from "jsonwebtoken";
 import multer from "multer";
@@ -198,7 +198,7 @@ const loginuser = async (req, res) => {
             httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
             secure: process.env.NODE_ENV === 'production', //The secure flag ensures that the cookie is only sent over HTTPS connections.
             maxAge: 3600000,
-            sameSite: 'None', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
+            sameSite: 'lax', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
             // (None) this is for deployment (https) requests
         }).json(
             {
@@ -237,25 +237,99 @@ const getUserInfo = (req, res) => {
 }
 
 const addToCart = async (req, res) => {
+    const userId = req.user.userId;
+    const { productId, quantity } = req.body;
+
     try {
-        const email = req.body.email;
-        const logedUser = await User.findOne({ email })
-        const productToAdd = req.body.id;
-        await User.findByIdAndUpdate(logedUser, {
-            $push: { userCart: productToAdd }
-        })
-        return res.send("product added")
+        // checking if product exists
+        const product = await Products.findById(productId); // use await here to get the actual product data
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // check if the cart exists for the user
+        let cart = await Cart.findOne({ userId });
+
+        // if cart does not exist, create a new cart with the product
+        if (!cart) {
+            cart = new Cart({
+                userId,
+                products: [{ productId, quantity }],
+            });
+            await cart.save();
+            return res.status(201).json(cart); // Return the created cart
+        }
+
+        // if the cart exists, check if the product is already in the cart
+        const productIndex = cart.products.findIndex(
+            (item) => item.productId.toString() === productId.toString() // Ensure correct comparison
+        );
+
+        if (productIndex >= 0) {
+            // If the product exists, update the quantity
+            cart.products[productIndex].quantity += quantity;
+        } else {
+            // If the product doesn't exist, add a new product to the cart
+            cart.products.push({ productId, quantity });
+        }
+
+        // Save the updated cart
+        await cart.save();
+        return res.status(200).json(cart); // Return the updated cart
     } catch (error) {
         console.log(error);
+        return res.status(500).json({ message: "Server error", error });
+    }
+};
+
+const showCart = async (req, res) => {
+    const userId = req.user.userId; // Assuming user ID is set in req.user after authentication
+
+    try {
+        // Find the cart associated with the user and populate product details
+        const cart = await Cart.findOne({ userId }).populate({
+            path: 'products.productId',
+            select: 'title price thumbnail' // Select only necessary fields for product
+        });
+
+        // If no cart is found for the user, return an empty cart
+        if (!cart) {
+            return res.status(200).json({ userId, products: [] });
+        }
+
+        // Return the cart with populated product information
+        res.status(200).json(cart);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+const removeFromCart = async(req,res) =>{
+    const userId = req.user.userId;
+    const {productId} = req.body
+
+    try {
+        const cart = await Cart.findOne({userId})
+     
+        if(!cart){
+            return res.status(404).json({message:"Cart not found"})
+        }
+
+        cart.products = cart.products.filter(item => item.productId.toString() !== productId)
+
+        await cart.save()
+        return res.status(200).json({message:"item removed from cart",cart})
+    } catch (error) {
+        console.log("Error while Removing item from cart",error)
+        return res.status(505).json({message:"Server error",error})
     }
 }
 
 const sendMailForProductAddPermission = async (req,res) =>{
 
     const {userName, email} = req.user;
-    console.log(userName,email)
     const message = req.body.message;
-    console.log(message)
     let transporter = nodemailer.createTransport({
         service:"Gmail", 
         auth:{
@@ -266,8 +340,8 @@ const sendMailForProductAddPermission = async (req,res) =>{
 
     const mailOptions = {
         from: email,
-        to: "mrabhi748@gmail.com",
-        subject: "Permission Request",
+        to: "jangidabhishek276@gmail.com",
+        subject: "Fun E-commerce Permission Request",
         text:`Name : ${userName}\nEmail:${email}\n${message}`
     };
 
@@ -280,6 +354,89 @@ const sendMailForProductAddPermission = async (req,res) =>{
     }
 }
 
+const getAllUser = async (req,res) =>{
+
+    try {
+        const userCount = await User.countDocuments();
+        const productCount = await Products.countDocuments();
+        const user = await User.find().select("-password -userCart")
+        if(!user){
+            res.status(404).json({message:"User not found"});
+        }
+       return res.status(200).json({ userCount, productCount, user})
+    } catch (error) {
+        console.log("Error while fetching all users")
+        return res.status(505).json({message:`error will get user ${error}`})
+    }
+}
+
+const getUser = async(req,res)=>{
+    try {
+        const userValue = req.body.userValue
+        const userByEmail = await User.findOne({email : userValue}).select("-password -userCart")
+        const userByUserName = await User.findOne({userName : userValue}).select("-password -userCart")
+        if(userByEmail){
+           return res.status(200).send(userByEmail)
+        }
+
+        if(userByUserName){
+            return res.status(200).send(userByUserName)
+         }
+
+         return res.status(404).json({message:"User not found"})
+
+    } catch (error) {
+        return res.status(505).json({message:`error while fetching user \n Erro :${error}`})
+    }
+}
+
+const grantPermission = async (req,res) =>{
+    try {
+        const userId = req.body.id
+        const user = await User.findOne({_id:userId})
+    
+        if(!user){
+            return res.status(404).json({message:"User not found"})
+        }
+    
+        user.writePermission = !user.writePermission
+        await user.save()
+        return res.status(200).json({message:"Permission changes"})
+    } catch (error) {
+        console.log("Error while granting permission to user",error)
+        return res.status(505).json({message:`Error while granting permission to user \n ${error}`})
+    }
+}
+
+const deleteUser = async (req, res) => {
+    const { id: userId } = req.body;
+
+    console.log("Received userId:", userId); // Log incoming userId to debug
+
+    // Validate if `userId` is provided and is a valid ObjectId format
+    // if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+    //     return res.status(400).json({ message: "Invalid or missing User ID" });
+    // }
+
+    try {
+        // Check if the user exists
+        const findUser = await User.findById(userId);
+
+        if (!findUser) {
+            return res.status(404).json({ message: "User not found with this ID" });
+        }
+
+        // Delete the user
+        await User.findByIdAndDelete(userId);
+
+        return res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        return res.status(500).json({ message: "Error while deleting user" });
+    }
+};
+
+
 export {
     getProducts,
     getProduct,
@@ -290,7 +447,13 @@ export {
     registerUser,
     loginuser,
     addToCart,
+    showCart,
     getUserInfo,
     logOut,
-    sendMailForProductAddPermission
+    sendMailForProductAddPermission,
+    removeFromCart,
+    getAllUser,
+    getUser,
+    grantPermission,    
+    deleteUser
 }

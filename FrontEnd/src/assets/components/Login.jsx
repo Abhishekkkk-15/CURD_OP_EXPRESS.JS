@@ -23,7 +23,7 @@ function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post("https://funecommerceserver.onrender.com/CURD/login", login,{
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}CURD/login`, login,{
         withCredentials: true // This is crucial for cookie handling
     });
     //   const { data } = await axios.post("http://localhost:9000/CURD/login", login,{
@@ -35,22 +35,11 @@ function Login() {
         return;
       }
       dispatch(setUserInfo(data.userInfo));
+      dispatch(setLogOrNot(true));
     } catch (error) { 
       console.error("An error occurred during login:", error);
     }
   };
-
-// this to access cookies in frontEnd when httponly is false
-
-//   function getCookie(name) {
-//     const value = `; ${document.cookie}`;
-//     const parts = value.split(`; ${name}=`);
-//     if (parts.length === 2) return parts.pop().split(';').shift();
-// }
-
-// // Try fetching the accessToken specifically
-// const accessToken = getCookie('accessToken');
-// console.log('Access Token:', accessToken);
 
   if(userInfo) {
     return <UserInfo />;

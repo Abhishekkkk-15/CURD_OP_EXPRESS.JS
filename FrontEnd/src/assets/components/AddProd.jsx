@@ -5,7 +5,7 @@ import RequestAdmin from './RequestAdmin';
 import { Link } from 'react-router-dom';
 
 function AddProd() {
-const userInfo = useSelector(state=> state.login.userInfo)
+let userInfo = useSelector(state=> state.login.userInfo)
   const [product, setProduct] = useState({
     title: '',
     price: '',
@@ -39,7 +39,7 @@ const userInfo = useSelector(state=> state.login.userInfo)
     formData.append('thumbnail', thumbnail);
 
     try {
-      const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/", formData,{
+      const {data} = await axios.post(`${import.meta.env.VITE_API_URL}CURD/`, formData,{
         withCredentials: true, headers: { "Content-Type": "multipart/form-data" }
       });
       // const {data} = await axios.post("https://funecommerceserver.onrender.com/CURD/", formData,{
@@ -57,7 +57,7 @@ const userInfo = useSelector(state=> state.login.userInfo)
 useEffect(()=>{
   (async()=>{
     try {
-      await axios.post("https://funecommerceserver.onrender.com/CURD/admin-route",{},{withCredentials: true}); //this helps to send cookies to backend server
+      await axios.post(`${import.meta.env.VITE_API_URL}CURD/admin-route`,{},{withCredentials: true}); //this helps to send cookies to backend server
       setAdmin(true)
     } catch (error) {
       setAdmin(false)

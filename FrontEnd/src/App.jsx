@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import AddProd from './assets/components/AddProd.jsx'
 import GetAllProd from './assets/components/GetAllProd'
@@ -10,6 +11,8 @@ import PlcaeOrder from './assets/components/PlcaeOrder.jsx'
 import UserInfo from './assets/components/User.jsx'
 import ShowProduct from './assets/components/ShowProduct.jsx'
 import RequestAdmin from './assets/components/RequestAdmin.jsx'
+import ShowCart from './assets/components/ShowCart.jsx'
+import Dashboard from './assets/components/Dashboard.jsx';
 
 function App() {
 
@@ -25,6 +28,8 @@ function App() {
    <Route path={"/userInfo"} element={<UserInfo />}/>
    <Route path={"/showProduct"} element={<ShowProduct />}/>
    <Route path={"/requestAdmin"} element={<RequestAdmin />}/>
+   <Route path={"/showCart"} element={<ShowCart />}/>
+   <Route path={"/dashboard"} element={<Dashboard />}/>
   </Routes>
  </div>
   )

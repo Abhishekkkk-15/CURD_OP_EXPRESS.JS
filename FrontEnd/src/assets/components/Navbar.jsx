@@ -1,11 +1,26 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserInfo ,setLogOrNot} from '../../app/Slices/loginSlice';
+
 
 function Navbar() {
   const loginSt = useSelector((state) => state.login.loginSt);
   const logOrNot = useSelector((state) => state.login.logOrNot);
   const userInfo = useSelector((state) => state.login.userInfo);
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    (async()=>{
+      try {
+       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}CURD/userInfo`,{},{withCredentials: true}); //this helps to send cookies to backend server
+       dispatch(setUserInfo(data?.userInfo))
+       dispatch(setLogOrNot(true))
+      } catch (error) {
+        console.log("error",error)
+      }
+    })();
+  },[])
 
   return (
 <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -41,11 +56,16 @@ function Navbar() {
                 Add Product
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white" to="/dashboard">
+                DashBoard
+              </Link>
+            </li>
           </ul>
 
          
-          <Link to="#">
-            <button className="btn btn-outline-success ms-3" type="button">
+          <Link to="/ShowCart">
+            <button className="btn btn-outline-success ms-2 " type="button">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -61,7 +81,7 @@ function Navbar() {
 
          
           {userInfo ? (
-            <div className="d-flex align-items-center ms-3">
+            <div className="d-flex align-items-center ms-2">
               <Link to="/userInfo" className="text-white ms-2">
                 <img
                   src={userInfo?.avatar || 'https://i.pinimg.com/736x/15/2d/4b/152d4b093faa2ea3af8e098516fbf037.jpg'}

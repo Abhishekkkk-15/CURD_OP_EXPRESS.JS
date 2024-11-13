@@ -75,23 +75,23 @@ if(!logOrNot){
               <div className="card shadow-sm h-100">
                 <div className="d-flex align-items-center">
                   <img 
-                    src={item.productId.thumbnail} 
-                    alt={item.productId.title} 
+                    src={item.productId.thumbnail || "thumbnail"} 
+                    alt={item.productId.title || "title"} 
                     className="card-img-top img-fluid"
                     style={{ maxHeight: '150px', objectFit: 'cover', width: '100%' }} 
                   />
                 </div>
                 <div className="card-body">
-                  <h5 className="card-title" style={{ fontSize: '1rem' }}>{item.productId.title}</h5>
+                  <h5 className="card-title" style={{ fontSize: '1rem' }}>{item.productId.title || "title"}</h5>
                   <p className="card-text text-muted" style={{ fontSize: '0.9rem' }}>
-                    {item.productId.description}
+                    {item.productId.description || "descripition"}
                   </p>
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <div>
-                      <span>Quantity: {item.quantity}</span>
+                      <span>Quantity: {item.quantity || "1"}</span>
                     </div>
                     <div>
-                      <strong>&#x20b9;{(item.productId.price * item.quantity).toFixed(2)}</strong>
+                      <strong>&#x20b9;{(item.productId.price * item.quantity).toFixed(2) || "0000"}</strong>
                     </div>
                   </div>
                   <button 

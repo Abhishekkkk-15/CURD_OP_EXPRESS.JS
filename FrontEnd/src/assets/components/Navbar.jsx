@@ -1,38 +1,37 @@
-import React, { useEffect } from 'react';
+import React,{useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserInfo, setLogOrNot } from '../../app/Slices/loginSlice';
+import { setUserInfo ,setLogOrNot} from '../../app/Slices/loginSlice';
 import axios from 'axios';
+
 
 function Navbar() {
   const loginSt = useSelector((state) => state.login.loginSt);
   const logOrNot = useSelector((state) => state.login.logOrNot);
   const userInfo = useSelector((state) => state.login.userInfo);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    (async () => {
+  useEffect(()=>{
+    (async()=>{
       try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_API_URL}CURD/userInfo`,
-          {},
-          { withCredentials: true }
-        ); // send cookies to backend server
-        dispatch(setUserInfo(data?.userInfo));
-        dispatch(setLogOrNot(true));
+       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}CURD/userInfo`,{},{withCredentials: true}); //this helps to send cookies to backend server
+       dispatch(setUserInfo(data?.userInfo))
+       dispatch(setLogOrNot(true))
       } catch (error) {
-        console.log("error", error);
+        console.log("error",error)
       }
     })();
-  }, []);
+  },[])
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
+       
         <Link className="navbar-brand" to="/">
           E-Commerce
         </Link>
 
+       
         <button
           className="navbar-toggler"
           type="button"
@@ -45,6 +44,7 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
+       
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
@@ -57,18 +57,16 @@ function Navbar() {
                 Add Product
               </Link>
             </li>
-            {/* Render Dashboard link only if the user is an admin */}
-            {userInfo?.role === 'admin' && (
-              <li className="nav-item">
-                <Link className="nav-link text-white" to="/dashboard">
-                  Dashboard
-                </Link>
-              </li>
-            )}
+            <li className="nav-item">
+              <Link className="nav-link text-white" to="/dashboard">
+                DashBoard
+              </Link>
+            </li>
           </ul>
 
+         
           <Link to="/ShowCart">
-            <button className="btn btn-outline-success ms-2" type="button">
+            <button className="btn btn-outline-success ms-2 " type="button">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -82,6 +80,7 @@ function Navbar() {
             </button>
           </Link>
 
+         
           {userInfo ? (
             <div className="d-flex align-items-center ms-2">
               <Link to="/userInfo" className="text-white ms-2">
@@ -103,6 +102,7 @@ function Navbar() {
         </div>
       </div>
     </nav>
+  
   );
 }
 

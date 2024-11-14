@@ -6,7 +6,6 @@ function Register() {
     const navigate = useNavigate();
     const [reg, setReg] = useState({});
     const [userRegi, setuserRegi] = useState('');
-    const [message,setMessage] = useState('')
     const [isError,setIsError] =useState(false)
 
     const handleChange = (e) => {
@@ -31,16 +30,14 @@ function Register() {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}CURD/reg`, formData, {
                 headers: { "Content-Type": "multipart/form-data" } 
             });
-            setMessage(response?.data.message)
-            setuserRegi(response?.data);
-            if(response?.data == "User Regitred"){
+            setuserRegi(response?.data.message);
+            if(response?.data === "User Registred"){
             setTimeout(()=>{
                 navigate('/login')
-            },3000)}
+            },2000)}
 
         } catch (error) {
             setIsError(true)
-            setMessage("Please enter Valid email and userName")
             console.error("Error during registration:", error);
         }
     };
@@ -51,7 +48,7 @@ function Register() {
     {userRegi && (
         <div className="alert alert-success d-flex align-items-center mb-4 p-2" role="alert">
             <i className="bi bi-check-circle-fill me-2"></i>
-            <label className="col-form-label fw-bold" style={{ fontSize: '1.1em' }}>{userRegi }</label>
+            <label className="col-form-label fw-bold" style={{ fontSize: '1.1em' }}>{userRegi}</label>
         </div>
     )}
 
@@ -90,7 +87,7 @@ function Register() {
                     onChange={handleChange}
                     required
                     />
-            <label className="text-danger">{isError ? message : ""}</label>
+            <label className="text-danger">{isError ? "Please enter Valid email and userName And password should be 8 character long ": ''}</label>
                     </div>
         </div>
         <div className="mb-3 row">

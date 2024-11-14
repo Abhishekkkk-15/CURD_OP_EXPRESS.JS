@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     const [users, setUsers] = useState([]);
     const [userCount, setUserCount] = useState(0);
     const [productCount, setProductCount] = useState(0);

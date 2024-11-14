@@ -123,7 +123,7 @@ const registerUser = async (req, res) => {
     const avatarLocalPath = req.file?.path;
 
     if (!avatarLocalPath) {
-        return res.status(200).json({ message:  "Avatar is Required"})
+        return res.status(404).json({ message:  "Avatar is Required"})
     }
 
     try {
@@ -134,7 +134,7 @@ const registerUser = async (req, res) => {
             email,
             password,
         })
-        res.status(200).json({ message:  "User Regitred"})
+        res.status(200).json({ message:  "User Registred"})
     } catch (error) {
         console.log("Error while Registreing User", error)
         res.status(505).json({ message:  "Server Error 505"})
@@ -201,7 +201,7 @@ const loginuser = async (req, res) => {
                 httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
                 secure: process.env.NODE_ENV === 'production', //The secure flag ensures that the cookie is only sent over HTTPS connections.
                 maxAge: 3600000,
-                sameSite: 'None', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
+                sameSite: 'lax', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
                 // (None) this is for deployment (https) requests
             }).json(
                 {

@@ -8,7 +8,7 @@ const Dashboard = () => {
     const [productCount, setProductCount] = useState(0);
     const [message, setMessage] = useState('');
     const [update, setUpdate] = useState(false);
-    const isError = message('')
+    const isError = ""
     useEffect(() => {
         const fetchData = async () => {
             try {

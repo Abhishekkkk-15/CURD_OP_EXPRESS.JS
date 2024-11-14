@@ -7,6 +7,7 @@ function Register() {
     const [reg, setReg] = useState({});
     const [userRegi, setuserRegi] = useState('');
     const [message,setMessage] = useState('')
+    const [isError,setIsError] =useState(false)
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -38,14 +39,14 @@ function Register() {
             },3000)}
 
         } catch (error) {
-            setMessage(response?.data.message)
+            setIsError(true)
+            setMessage("Please enter Valid email and userName")
             console.error("Error during registration:", error);
         }
     };
 
     return (
         <>
-        <label className="col-sm-2 col-form-label">{message}</label>
         <div className="container w-100 p-3 align-middle bg-g">
     {userRegi && (
         <div className="alert alert-success d-flex align-items-center mb-4 p-2" role="alert">
@@ -56,7 +57,7 @@ function Register() {
 
     <form onSubmit={handleRegister}>
         <div className="mb-3 row">
-            <label className="col-sm-2 col-form-label">Profile Img</label>
+            <label className="col-sm-2 col-form-label">Profile Image</label>
             <div className="col-sm-5">
                 <input
                     type="file"
@@ -68,7 +69,7 @@ function Register() {
             </div>
         </div>
         <div className="mb-3 row">
-            <label className="col-sm-2 col-form-label">UserName</label>
+            <label className="col-sm-2 col-form-label">User Name</label>
             <div className="col-sm-5">
                 <input
                     type="text"
@@ -88,8 +89,9 @@ function Register() {
                     name="email"
                     onChange={handleChange}
                     required
-                />
-            </div>
+                    />
+            <label className="text-danger">{isError ? message : ""}</label>
+                    </div>
         </div>
         <div className="mb-3 row">
             <label className="col-sm-2 col-form-label">Password</label>

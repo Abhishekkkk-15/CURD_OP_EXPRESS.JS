@@ -31,7 +31,7 @@ function Register() {
                 headers: { "Content-Type": "multipart/form-data" } 
             });
             setuserRegi(response?.data.message);
-            if(response?.data === "User Registred"){
+            if(response?.data.message == "User Registred"){
             setTimeout(()=>{
                 navigate('/login')
             },2000)}

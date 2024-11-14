@@ -31,7 +31,7 @@ const QuickView = ({ product, closeModal, addToCart }) => {
                 <p>{product.description || "Product Descripition"}</p>
                 <div className="d-flex justify-content-between">
                   <Link to="/buy"><button className="btn btn-primary">Buy Now</button></Link>
-                  <button className="btn btn-success" onClick={() => addToCart(product._id || "id")}>Add to Cart</button>
+                  <button className="btn btn-success" onClick={() => addToCart(product)}>Add to Cart</button>
                 </div>
               </div>
             </div>

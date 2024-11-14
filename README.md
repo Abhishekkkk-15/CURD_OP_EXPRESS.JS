@@ -3,7 +3,7 @@
 Description:
 The FUN E-COMMERCE APP is a modern, full-stack e-commerce platform that combines user-friendly design with a powerful backend. Built to offer a smooth and enjoyable shopping experience, this app includes features like authentication, product management.
 
-link: https://funecommerce.vercel.app
+link: https://funecommerce.vercel.app (It may take some time for server to reponse some time due to render free service's)
 
 Features:
 

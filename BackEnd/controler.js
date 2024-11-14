@@ -201,7 +201,7 @@ const loginuser = async (req, res) => {
                 httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
                 secure: process.env.NODE_ENV === 'production', //The secure flag ensures that the cookie is only sent over HTTPS connections.
                 maxAge: 3600000,
-                sameSite: 'lax', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
+                sameSite: 'None', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
                 // (None) this is for deployment (https) requests
             }).json(
                 {

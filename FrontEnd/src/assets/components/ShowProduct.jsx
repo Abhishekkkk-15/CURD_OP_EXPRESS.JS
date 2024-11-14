@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const ShowProduct = () => {
   const productDetails = useSelector(state => state.product.productDetails);
-  console.log(productDetails)
+  const [quantity,setQuantity] = useState(1)
   if(!productDetails){
     return <h1 className=" container text-dark">No Product to show</h1>
   }
@@ -70,10 +70,13 @@ const ShowProduct = () => {
               <Link to="/buy">
                 <button className="btn btn-lg btn-primary btn-block">Buy Now</button>
               </Link>
-              <button className="btn btn-lg btn-outline-secondary btn-block" onClick={() => addToCart(productDetails._id,1)}>Add to Cart</button>
+              <button className="btn btn-lg btn-outline-secondary btn-block" onClick={() => addToCart(productDetails._id,quantity)}>Add to Cart</button>
             </div>
 
-
+            <div className="mb-3">
+  <label className="form-label">Quantity</label>
+  <input type="number" className="form-control" id="quantity" name="quantity" value={quantity} max='5' min='1' onChange={(e)=>setQuantity(e.target.value)}/>
+</div>
             <div className="mt-4">
               <h5 className="text-muted">Seller Info</h5>
               <p className="text-muted">Sold by: <strong>{productDetails.sellerName || "AJIO SELLER"}</strong></p>

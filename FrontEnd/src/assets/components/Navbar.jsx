@@ -1,109 +1,154 @@
-import React,{useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserInfo ,setLogOrNot} from '../../app/Slices/loginSlice';
+import { setUserInfo, setLogOrNot } from '../../app/Slices/loginSlice';
 import axios from 'axios';
+import styled from 'styled-components';
 
-
-function Navbar() {
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const loginSt = useSelector((state) => state.login.loginSt);
   const logOrNot = useSelector((state) => state.login.logOrNot);
   const userInfo = useSelector((state) => state.login.userInfo);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  useEffect(()=>{
-    (async()=>{
+  useEffect(() => {
+    (async () => {
       try {
-       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}CURD/userInfo`,{},{withCredentials: true}); //this helps to send cookies to backend server
-       dispatch(setUserInfo(data?.userInfo))
-       dispatch(setLogOrNot(true))
+        const { data } = await axios.post(
+          `${import.meta.env.VITE_API_URL}CURD/userInfo`,
+          {},
+          { withCredentials: true }
+        );
+        dispatch(setUserInfo(data?.userInfo));
+        dispatch(setLogOrNot(true));
       } catch (error) {
-        console.log("error",error)
+        console.log('error', error);
       }
     })();
-  },[])
+  }, []);
 
   return (
-<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
-       
-        <Link className="navbar-brand" to="/">
-          E-Commerce
-        </Link>
+    <NavbarContainer>
+      <NavbarBrand to="/">E-Commerce</NavbarBrand>
 
-       
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+      <ToggleButton onClick={() => setIsOpen(!isOpen)}>
+        ☰
+      </ToggleButton>
 
-       
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link active text-white" aria-current="page" to="/">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-white" to="/add">
-                Add Product
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-white" to="/dashboard">
-                DashBoard
-              </Link>
-            </li>
-          </ul>
+      <NavLinks $isOpen={isOpen}>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/add">Add Product</NavLink>
+        <NavLink to="/dashboard">DashBoard</NavLink>
 
-         
-          <Link to="/ShowCart">
-            <button className="btn btn-outline-success ms-2 " type="button">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                className="bi bi-cart"
-                viewBox="0 0 16 16"
-              >
-                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-              </svg>
-            </button>
+        <CartButton to="/ShowCart">
+          🛒 Cart
+        </CartButton>
+
+        {userInfo ? (
+          <Link to="/userInfo">
+            <ProfileImage
+              src={
+                userInfo?.avatar ||
+                'https://i.pinimg.com/736x/15/2d/4b/152d4b093faa2ea3af8e098516fbf037.jpg'
+              }
+              alt="Profile"
+            />
           </Link>
-
-         
-          {userInfo ? (
-            <div className="d-flex align-items-center ms-2">
-              <Link to="/userInfo" className="text-white ms-2">
-                <img
-                  src={userInfo?.avatar || 'https://i.pinimg.com/736x/15/2d/4b/152d4b093faa2ea3af8e098516fbf037.jpg'}
-                  alt="Profile"
-                  className="rounded-circle"
-                  style={{ width: '35px', height: '35px', objectFit: 'cover', border: '2px solid white' }}
-                />
-              </Link>
-            </div>
-          ) : (
-            <Link to="/login">
-              <button className="btn btn-outline-success ms-3" type="button">
-                Login
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
-    </nav>
-  
+        ) : (
+          <CartButton to="/login">Login</CartButton>
+        )}
+      </NavLinks>
+    </NavbarContainer>
   );
-}
+};
+
+// Styled Components
+const NavbarContainer = styled.nav`
+  background-color: #343a40;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+`;
+
+const NavbarBrand = styled(Link)`
+  font-size: 1.5rem;
+  color: #fff;
+  text-decoration: none;
+  &:hover {
+    color: #bbb;
+  }
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
+    position: absolute;
+    top: 3.5rem;
+    left: 0;
+    right: 0;
+    background-color: #343a40;
+    flex-direction: column;
+    padding: 1rem 0;
+    z-index: 1;
+  }
+`;
+
+const NavLink = styled(Link)`
+  margin: 0 1rem;
+  color: #fff;
+  text-decoration: none;
+  &:hover {
+    color: #bbb;
+  }
+
+  @media (max-width: 768px) {
+    margin: 0.5rem 0;
+  }
+`;
+
+const CartButton = styled(Link)`
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid #28a745;
+  color: #28a745;
+  padding: 0.25rem 0.5rem;
+  margin-top:8px;
+  margin-left: 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #28a745;
+    color: white;
+  }
+`;
+
+const ProfileImage = styled.img`
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-left: 1rem;
+  border: 2px solid white;
+`;
+
+const ToggleButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
 
 export default Navbar;

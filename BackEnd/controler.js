@@ -22,11 +22,11 @@ const getProduct = async (req, res) => {
         const prod = await Products.findOne({ id: req.params.id })
         //  const product = prod.find(p => p.id === parseInt(req.params.id)) //Use find istend of filter because filter will always return an empty array and empty array is not empty
         if (!prod) {
-            return res.status(404).send("Product not found");  // Send a proper 404 response and return
+            return res.status(404).json({ message: "Product not found" }); 
         }
         res.status(200).send(prod)
     } catch (error) {
-        return res.status(404).send(`Product with id : ${req.params.id} not available`)
+        return res.status(404).json({ message: `Product with id : ${req.params.id} not available` })
     }
 
 }
@@ -35,7 +35,7 @@ const createProduct = async (req, res) => {
     const thumbnaillocalPath = req.file?.path
 
     if (!thumbnaillocalPath) {
-        return res.status(200).send("Thumbnail is required!")
+        return res.status(200).json({ message: "Thumbnail is required!" })
     }
     console.log(req.user.userName)
     try {
@@ -49,9 +49,9 @@ const createProduct = async (req, res) => {
             category: req.body.category,
             thumbnail,
         })
-        res.status(200).send("Product Created")
+        res.status(200).json({ message: "Product Created" })
     } catch (error) {
-        res.send(`Error : ${error.message}`)
+        res.json({ message: `Error : ${error.message}`})
     }
 }
 
@@ -61,11 +61,11 @@ const updateProduct = async (req, res) => {
         const dataFromBody = req.body
         const updatedProduct = await Products.findOneAndUpdate({ id: id }, dataFromBody, { new: true });
         if (!updatedProduct) {
-            return res.status(404).send("Product Not Found")
+            return res.status(404).json({ message: "Product Not Found" })
         }
         res.status(200).json(updatedProduct)
     } catch (error) {
-        return res.status(404).send("Can't Update", error.message)
+        return res.status(404).json({ message:  `Can't Update, error.message`})
     }
 }
 
@@ -78,11 +78,11 @@ const replaceProduct = async (req, res) => {
             { new: true }
         );
         if (!updatedProduct) {
-            return res.status(404).json({ "message": "Product Not Found" })
+            return res.status(404).json({ message: "Product Not Found" })
         }
         res.status(200).send("Product Replaced")
     } catch (error) {
-        return res.status(500).send(`Server Error ${error.message}`)
+        return res.status(500).json({ message:  `Server Error ${error.message}`})
     }
 }
 
@@ -90,14 +90,14 @@ const deleteProduct = async (req, res) => {
     const productID = req.params.id;
 
     if (!productID) {
-        return res.status(400).send("Product not found or invalid Product ID provided");
+        return res.status(400).json({ message:  "Product not found or invalid Product ID provided"})
     }
 
     try {
         const findProd = await Products.findById(productID);
 
         if (!findProd) {
-            return res.status(404).send("Product not found with this ID");
+            return res.status(404).json({ message:  "Product not found with this ID"})
         }
 
         await Products.findByIdAndDelete(productID);
@@ -105,7 +105,7 @@ const deleteProduct = async (req, res) => {
         return res.status(200).send("Product Deleted");
     } catch (error) {
         console.error("Error deleting product:", error);
-        return res.status(500).send("An error occurred while deleting the product");
+        return res.status(500).json({ message:  "An error occurred while deleting the product"})
     }
 };
 
@@ -117,13 +117,13 @@ const registerUser = async (req, res) => {
     })
 
     if (existedUser) {
-        return res.status(200).send("User and Email Already Exists!!")
+        return res.status(200).json({ message:  "User and Email Already Exists!!"})
     }
 
     const avatarLocalPath = req.file?.path;
 
     if (!avatarLocalPath) {
-        return res.status(200).send("Avatar is Required")
+        return res.status(200).json({ message:  "Avatar is Required"})
     }
 
     try {
@@ -134,79 +134,89 @@ const registerUser = async (req, res) => {
             email,
             password,
         })
-        res.status(200).send("User Regitred")
+        res.status(200).json({ message:  "User Regitred"})
     } catch (error) {
         console.log("Error while Registreing User", error)
+        res.status(505).json({ message:  "Server Error 505"})
     }
 }
 
 const loginuser = async (req, res) => {
 
-    const user = await User.findOne({ "email": req.body.email })
-    const userInfo = {
-        userName: user?.userName,
-        email: user?.email,
-        writePermission: user?.writePermission,
-        avatar: user?.avatar,
-        isAdmin: user?.isAdmin
-    }
-
-    if (!user) {
+    try {
+        const userIdentity = req.body.email;
+        const user = await User.findOne({ $or: [{ userName:userIdentity }, { email:userIdentity }] })
+        const userInfo = {
+            userName: user?.userName,
+            email: user?.email,
+            writePermission: user?.writePermission,
+            avatar: user?.avatar,
+            isAdmin: user?.isAdmin
+        }
+    
+        if (!user) {
+            return res.json(
+                {
+                    error: "user not found",
+                }
+            )
+        }
+    
+        if (req.body.password != user.password) {
+            return res.json(
+                {
+                    error: "Email or password are incorrect",
+                }
+            )
+        }
+    
+        const accessToken = jwt.sign(
+            {
+                userName:user.userName,
+                userId: user._id,
+                email: user.email,
+                writePermission: user.writePermission,
+                isAdmin: user.isAdmin,
+                avatar: user.avatar,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        )
+    
+        const refreshToken = jwt.sign(
+            {
+                userName:user.userName,
+                userId: user._id,
+                email: user.email,
+                writePermission: user.writePermission,
+                isAdmin: user.isAdmin,
+                avatar: user.avatar,
+            }, 
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: "7d" }
+        )
+    
+        if (user.email && user.password === req.body.password) {
+            return res.status(200).cookie('accessToken', accessToken, {
+                httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
+                secure: process.env.NODE_ENV === 'production', //The secure flag ensures that the cookie is only sent over HTTPS connections.
+                maxAge: 3600000,
+                sameSite: 'None', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
+                // (None) this is for deployment (https) requests
+            }).json(
+                {
+                    accessToken,
+                    userInfo,
+                    message: "User loged in",
+                    writePermission: user?.writePermission
+                })
+        }
+    } catch (error) {
         return res.json(
             {
-                error: "user not found",
+                error: `Server Error ${error}`,
             }
         )
-    }
-
-    if (req.body.password != user.password) {
-        return res.json(
-            {
-                error: "Email or password are incorrect",
-            }
-        )
-    }
-
-    const accessToken = jwt.sign(
-        {
-            userName:user.userName,
-            userId: user._id,
-            email: user.email,
-            writePermission: user.writePermission,
-            isAdmin: user.isAdmin,
-            avatar: user.avatar,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-    )
-
-    const refreshToken = jwt.sign(
-        {
-            userName:user.userName,
-            userId: user._id,
-            email: user.email,
-            writePermission: user.writePermission,
-            isAdmin: user.isAdmin,
-            avatar: user.avatar,
-        }, 
-        process.env.JWT_REFRESH_SECRET,
-        { expiresIn: "7d" }
-    )
-
-    if (user.email && user.password === req.body.password) {
-        return res.status(200).cookie('accessToken', accessToken, {
-            httpOnly: true, //this is important if you don't want frontend to access cookies in javascript
-            secure: process.env.NODE_ENV === 'production', //The secure flag ensures that the cookie is only sent over HTTPS connections.
-            maxAge: 3600000,
-            sameSite: 'None', // (lax) If is to sent cookies even after refreshing the page in development(//localhost)
-            // (None) this is for deployment (https) requests
-        }).json(
-            {
-                accessToken,
-                userInfo,
-                message: "User loged in",
-                writePermission: user?.writePermission
-            })
     }
 
 }
@@ -224,16 +234,20 @@ const logOut = (req, res) => {
         return res.status(200).json({ message: "User logged out" });
     } catch (error) {
         console.error("Error logging out:", error);
-        res.status(500).json({ message: "Error logging out" });
+        res.status(505).json({ message: "Error logging out" });
     }
 };
 
 const getUserInfo = (req, res) => {
-    const userInfo = req.user;
-    if (!userInfo) return null;
-    res.status(200).json({
-        userInfo
-    })
+    try {
+        const userInfo = req.user;
+        if (!userInfo) return null;
+        res.status(200).json({
+            userInfo
+        })
+    } catch (error) {
+        res.status(505).json({ message: "Error logging out" });
+    }
 }
 
 const addToCart = async (req, res) => {
@@ -347,10 +361,10 @@ const sendMailForProductAddPermission = async (req,res) =>{
 
     try {
         await transporter.sendMail(mailOptions);
-        res.status(200).send("Mail Sent Successfully");
+        res.status(200).json({ message:  "Mail Sent!"})
     } catch (error) {
         console.log(error)
-        res.status(500).send(error)
+        res.status(505).json({ message:  "Server Error 505"})
     }
 }
 
@@ -411,22 +425,15 @@ const grantPermission = async (req,res) =>{
 const deleteUser = async (req, res) => {
     const { id: userId } = req.body;
 
-    console.log("Received userId:", userId); // Log incoming userId to debug
-
-    // Validate if `userId` is provided and is a valid ObjectId format
-    // if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-    //     return res.status(400).json({ message: "Invalid or missing User ID" });
-    // }
+    console.log("Received userId:", userId);
 
     try {
-        // Check if the user exists
         const findUser = await User.findById(userId);
 
         if (!findUser) {
             return res.status(404).json({ message: "User not found with this ID" });
         }
 
-        // Delete the user
         await User.findByIdAndDelete(userId);
 
         return res.status(200).json({ message: "User deleted successfully" });

@@ -31,7 +31,6 @@ function RequestAdmin() {
             //In axios we can have first url second is data {must be object}, third is cookies and header sending options
             await axios.post(`${import.meta.env.VITE_API_URL}CURD/request-admin`, {message} , { withCredentials: true });
             alert("Mail Sent"); 
-            console.log(message)
             setSent(true)
         } catch (error) {
             alert("Error sending mail");

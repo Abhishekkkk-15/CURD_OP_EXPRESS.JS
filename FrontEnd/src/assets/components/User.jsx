@@ -1,70 +1,95 @@
-import React from 'react';
-import { useEffect } from 'react';
+// UserInfo.js
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserInfo } from '../../app/Slices/loginSlice';
 import Logout from './Logout';
 import axios from 'axios';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+`;
+
+const Card = styled.div`
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+`;
+
+const AvatarContainer = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const Avatar = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+`;
+
+const UserName = styled.h5`
+  font-size: 1.5rem;
+  color: #333;
+  margin: 1rem 0;
+`;
+
+const InfoText = styled.p`
+  font-size: 1rem;
+  color: #666;
+  margin: 0.3rem 0;
+  & span {
+    color: #333;
+  }
+`;
+
+const Footer = styled.div`
+  margin-top: 2rem;
+  font-style: italic;
+  color: #888;
+`;
 
 function UserInfo() {
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.login.userInfo);
 
-const dispatch = useDispatch()
-const userInfo = useSelector(state => state.login.userInfo);  
-useEffect(()=>{
-  (async()=>{
-    try {
-     const {data} = await axios.post(`${import.meta.env.VITE_API_URL}CURD/userInfo`,{},{withCredentials: true}); //this helps to send cookies to backend server
-     dispatch(setUserInfo(data?.userInfo))
-    } catch (error) {
-      console.log("error",error)
-    }
-  })();
-},[])
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await axios.post(`${import.meta.env.VITE_API_URL}CURD/userInfo`, {}, { withCredentials: true });
+        dispatch(setUserInfo(data?.userInfo));
+      } catch (error) {
+        console.log("Error fetching user info:", error);
+      }
+    })();
+  }, [dispatch]);
 
   return (
-    <>
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="card shadow-lg border-0" style={{ maxWidth: '500px', width: '100%' }}>
-        <div className="card-body text-center">
-        
-          <div className="avatar-container mb-4">
-            {userInfo?.avatar ? (
-              <img 
-                src={userInfo.avatar} 
-                alt="Avatar" 
-                className="rounded-circle" 
-                style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
-              />
-            ) : (
-              <div className="text-secondary">
-                <img 
-                  src="https://i.pinimg.com/736x/15/2d/4b/152d4b093faa2ea3af8e098516fbf037.jpg" 
-                  alt="Avatar" 
-                  className="rounded-circle" 
-                  style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
-                />
-              </div>
-            )}
-          </div>
-
-         
-          <h5 className="card-title mb-3">{userInfo?.userName || "User Name"}</h5>
-          <div className="info-container mb-3">
-            <p className="card-text text-muted">Email: <span className="text-dark">{userInfo?.email || "User Email"}</span></p>
-            <p className="card-text text-muted">Member: <span className="text-dark">{userInfo?.writePermission ? 'Premium ' : 'Non-Premium '}</span></p>
-          </div>
-        </div>
-
-      
-        <div className="card-footer text-center">
-          <small className="text-muted font-italic">Thank you for visiting!</small>
+    <Container>
+      <Card>
+        <AvatarContainer>
+          <Avatar
+            src={userInfo?.avatar || "https://i.pinimg.com/736x/15/2d/4b/152d4b093faa2ea3af8e098516fbf037.jpg"}
+            alt="Avatar"
+          />
+        </AvatarContainer>
+        <UserName>{userInfo?.userName || "User Name"}</UserName>
+        <InfoText>Email: <span>{userInfo?.email || "User Email"}</span></InfoText>
+        <InfoText>Member: <span>{userInfo?.writePermission ? 'Premium' : 'Non-Premium'}</span></InfoText>
+        <Footer>
+          <small>Thank you for visiting!</small>
+        </Footer>
         <Logout />
-        </div>
-      </div>
-
-    </div>
-      
-      
-    </>
+      </Card>
+    </Container>
   );
 }
 

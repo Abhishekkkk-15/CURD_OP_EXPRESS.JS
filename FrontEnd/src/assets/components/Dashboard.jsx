@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 
 const Dashboard = () => {
     const [users, setUsers] = useState([]);
@@ -7,136 +8,192 @@ const Dashboard = () => {
     const [productCount, setProductCount] = useState(0);
     const [message, setMessage] = useState('');
     const [update, setUpdate] = useState(false);
-    const [show,setShow] = useState()
 
     useEffect(() => {
-        (async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.post(`${import.meta.env.VITE_API_URL}CURD/getAllUsers`, {}, { withCredentials: true });
+                const response = await axios.post(
+                    `${import.meta.env.VITE_API_URL}CURD/getAllUsers`, 
+                    {}, 
+                    { withCredentials: true }
+                );
+                setMessage(response?.data.message)
                 setUsers(response.data.user);
                 setUserCount(response.data.userCount);
                 setProductCount(response.data.productCount);
             } catch (error) {
-                console.log("Error fetching dashboard data:", error);
                 setMessage('You are not Authorized');
             }
-        })();
+        };
+        fetchData();
     }, [update]);
+
 
     const togglePermission = async (userId) => {
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}CURD/grantPermission`,
-                { id: userId },
+                `${import.meta.env.VITE_API_URL}CURD/grantPermission`, 
+                { id: userId }, 
                 { withCredentials: true }
             );
             setMessage(response.data.message);
-            setUpdate(!update);
+            setUpdate(prev => !prev); 
         } catch (error) {
-            console.log("Error updating permission:", error);
             setMessage('Failed to update permission.');
         }
-        setTimeout(() => setMessage(''), 2000); 
+
+        setTimeout(() => setMessage(''), 3000); 
     };
 
     const deleteUser = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this user?")) return;
+
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}CURD/deleteUser`, { id }, { withCredentials: true });
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}CURD/deleteUser`, 
+                { id }, 
+                { withCredentials: true }
+            );
             setMessage(response.data.message);
-            setUpdate(!update);
+            setUpdate(prev => !prev);
         } catch (error) {
-            console.log("Error deleting user:", error);
             setMessage('Failed to Delete User');
         }
-        setTimeout(() => setMessage(''), 2000); 
+
+        setTimeout(() => setMessage(''), 3000); 
     };
 
+    if (process.env.NODE_ENV === 'development') {
+        console.warn = () => {}; // Suppresses all warnings during development
+      }
+
     return (
-        <div style={{ padding: '20px', marginTop: '20px' }}>
-            {message && (
-                <div
-                    style={{
-                        padding: '10px',
-                        color: message.includes('Failed') ? '#ff4d4f' : '#52c41a',
-                        border: `1px solid ${message.includes('Failed') ? '#ff4d4f' : '#52c41a'}`,
-                        borderRadius: '5px',
-                        marginBottom: '20px',
-                        textAlign: 'center'
-                    }}
-                >
-                    {message}
-                </div>
-            )}
+        <DashboardContainer>
+            {message && <AlertMessage isError={isError}>{message}</AlertMessage>}
 
-            <h2 style={{ marginBottom: '20px' }}>Admin Dashboard</h2>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '5px', flex: 1, marginRight: '10px' }}>
-                    <h4>Total Users</h4>
-                    <p>{userCount}</p>
-                </div>
-                <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '5px', flex: 1, marginLeft: '10px' }}>
-                    <h4>Total Products</h4>
-                    <p>{productCount}</p>
-                </div>
-            </div>
+            <Heading>Admin Dashboard</Heading>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-                {users.map(user => (
-                    user?.email !== "mrabhi748@gmail.com"?<div
-                        key={user._id}
-                        style={{
-                            padding: '20px',
-                            border: '1px solid #ddd',
-                            borderRadius: '5px',
-                            width: '300px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center'
-                        }}
-                    >
-                        <img
-                            src={user.avatar}
-                            alt="User Avatar"
-                            style={{ width: '80px', height: '80px', borderRadius: '50%', marginBottom: '10px' }}
-                        />
-                        <h5>{user.userName}</h5>
-                        <p>{user.email}</p>
-                        <p>
-                            <strong>Write Permission:</strong> {user.writePermission ? 'Granted' : 'Revoked'}
-                        </p>
-                        <button
-                            style={{
-                                padding: '10px 20px',
-                                margin: '10px 0',
-                                backgroundColor: user.writePermission ? '#52c41a' : '#ff4d4f',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer'
-                            }}
+            <StatsContainer>
+                <StatCard title="Total Users" count={userCount} />
+                <StatCard title="Total Products" count={productCount} />
+            </StatsContainer>
+
+            <UsersContainer>
+                {users.filter(user => user?.email !== "mrabhi748@gmail.com").map(user => (
+                    <UserCard key={user._id}>
+                        <Avatar src={user.avatar} alt="User Avatar" />
+                        <UserInfo>
+                            <h5>{user.userName}</h5>
+                            <p>{user.email}</p>
+                            <p><strong>Write Permission:</strong> {user.writePermission ? 'Granted' : 'Revoked'}</p>
+                        </UserInfo>
+                        <ActionButton
+                            isGranted={user.writePermission || false}  
                             onClick={() => togglePermission(user._id)}
                         >
                             {user.writePermission ? 'Revoke' : 'Grant'} Permission
-                        </button>
-                        <button
-                            style={{
-                                padding: '10px 20px',
-                                backgroundColor: '#ff4d4f',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer'
-                            }}
-                            onClick={() => deleteUser(user._id)}
-                        >
+                        </ActionButton>
+                        <DeleteButton onClick={() => deleteUser(user._id)}>
                             Delete User
-                        </button>
-                    </div> : ""
+                        </DeleteButton>
+                    </UserCard>
                 ))}
-            </div>
-        </div>
+            </UsersContainer>
+        </DashboardContainer>
     );
 };
+
+// Styled Components
+
+const DashboardContainer = styled.div`
+    padding: 2rem;
+`;
+
+const Heading = styled.h2`
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+`;
+
+const AlertMessage = styled.div`
+    padding: 0.75rem;
+    background-color: ${props => (props.isError ? '#ffccc7' : '#f6ffed')};
+    color: ${props => (props.isError ? '#ff4d4f' : '#52c41a')};
+    border: 1px solid ${props => (props.isError ? '#ff4d4f' : '#52c41a')};
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+`;
+
+const StatsContainer = styled.div`
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+`;
+
+const StatCard = ({ title, count }) => (
+    <StatCardWrapper>
+        <h4>{title}</h4>
+        <p>{count}</p>
+    </StatCardWrapper>
+);
+
+const StatCardWrapper = styled.div`
+    flex: 1;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+`;
+
+const UsersContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+`;
+
+const UserCard = styled.div`
+    width: 300px;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Avatar = styled.img`
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+`;
+
+const UserInfo = styled.div`
+    margin-bottom: 1.5rem;
+`;
+
+const ActionButton = styled.button`
+    padding: 0.75rem 1.5rem;
+    margin-bottom: 1rem;
+    background-color: ${props => (props.isGranted ? '#52c41a' : '#ff4d4f')};
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: ${props => (props.isGranted ? '#45b32b' : '#d93636')};
+    }
+`;
+
+const DeleteButton = styled(ActionButton)`
+    background-color: #ff4d4f;
+
+    &:hover {
+        background-color: #d93636;
+    }
+`;
 
 export default Dashboard;

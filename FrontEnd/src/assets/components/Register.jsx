@@ -6,6 +6,7 @@ function Register() {
     const navigate = useNavigate();
     const [reg, setReg] = useState({});
     const [userRegi, setuserRegi] = useState('');
+    const [message,setMessage] = useState('')
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -26,13 +27,10 @@ function Register() {
         formData.append("password", reg.password);
 
         try {
-            // Vercel Rotue
             const response = await axios.post(`${import.meta.env.VITE_API_URL}CURD/reg`, formData, {
                 headers: { "Content-Type": "multipart/form-data" } 
             });
-            // const response = await axios.post("http://localhost:9000/CURD/reg", formData, {
-            //     headers: { "Content-Type": "multipart/form-data" }  
-            // });
+            setMessage(response?.data.message)
             setuserRegi(response?.data);
             if(response?.data == "User Regitred"){
             setTimeout(()=>{
@@ -40,11 +38,14 @@ function Register() {
             },3000)}
 
         } catch (error) {
+            setMessage(response?.data.message)
             console.error("Error during registration:", error);
         }
     };
 
     return (
+        <>
+        <label className="col-sm-2 col-form-label">{message}</label>
         <div className="container w-100 p-3 align-middle bg-g">
     {userRegi && (
         <div className="alert alert-success d-flex align-items-center mb-4 p-2" role="alert">
@@ -110,7 +111,7 @@ function Register() {
         <Link to="/login" className="mt-3">Already have an account?</Link>
     </p>
 </div>
-
+</>
     );
 }
 

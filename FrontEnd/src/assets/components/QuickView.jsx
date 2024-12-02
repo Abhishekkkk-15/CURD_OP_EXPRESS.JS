@@ -1,6 +1,5 @@
-// QuickView.js
 import React from 'react';
-import './CSS/QuickView.css'; // Import the CSS for the modal
+import './CSS/QuickView.css';
 import { Link } from 'react-router-dom';
 
 const QuickView = ({ product, closeModal, addToCart }) => {

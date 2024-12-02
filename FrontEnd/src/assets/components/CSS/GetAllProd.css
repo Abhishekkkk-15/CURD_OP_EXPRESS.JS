@@ -1,0 +1,13 @@
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f9f9f9; /* Optional background for clarity */
+  }
+  
+  .loading-icon {
+    width: 90px;
+    height: 90px;
+  }
+  
